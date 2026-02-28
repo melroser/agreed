@@ -86,8 +86,36 @@ export default function AdminDashboardPage() {
 
   if (error || !data) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <p className="text-red-500">{error ?? "No data available"}</p>
+      <div className="space-y-8 animate-fade-in">
+        <div className="flex items-center justify-between">
+          <h1 className="page-title">📊 Skills Gap Dashboard</h1>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={seedDemo}
+              disabled={seeding}
+              className="btn-secondary flex items-center gap-2 text-xs opacity-60 hover:opacity-100"
+              title="God Mode: Seed perfect demo data"
+            >
+              {seeding ? (
+                <><span className="spinner !w-3 !h-3" /> Seeding...</>
+              ) : (
+                <>⚡ Demo Data</>
+              )}
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <div className="text-5xl mb-4">📊</div>
+          <p className="text-red-500 mb-2">{error ?? "No data available"}</p>
+          <p className="text-gray-400 text-sm">Try signing out and back in, or click ⚡ Demo Data above.</p>
+        </div>
+        {toast && (
+          <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
+            <div className="bg-gray-900 text-white px-5 py-3 rounded-xl shadow-lg text-sm flex items-center gap-2">
+              <span>✅</span> {toast}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -203,6 +231,15 @@ export default function AdminDashboardPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Toast notification */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
+          <div className="bg-gray-900 text-white px-5 py-3 rounded-xl shadow-lg text-sm flex items-center gap-2">
+            <span>✅</span> {toast}
           </div>
         </div>
       )}

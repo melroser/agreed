@@ -183,7 +183,7 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
     - Add hidden button in dev mode or just hit the URL before demo
     - **This is your insurance policy - perfect demo data in 1 click**
     - _Requirements: (demo preparation)_
-- [ ] 13. Final Demo Preparation
+- [x] 13. Final Demo Preparation
   - Test complete flow: Admin creates role → Admin creates employee → Employee takes assessment → View skill tree → View leaderboard → Admin views dashboard → Admin exports CSV
   - Prepare 2-3 minute demo script highlighting:
     1. Problem: Companies struggle to track green skills
