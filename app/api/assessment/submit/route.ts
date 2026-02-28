@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { employees, employeeSkillAssessments, employeeXP } from "@/lib/db/schema";
-import { eq, and, desc } from "drizzle-orm";
+import { employees, employeeSkillAssessments, employeeXP, departmentScores } from "@/lib/db/schema";
+import { eq, and, desc, sql } from "drizzle-orm";
 
 interface ResponseItem {
   questionId: string;
@@ -124,6 +124,52 @@ export async function POST(request: Request) {
       companyId,
       employeeId,
       xpTotal: xpEarned,
+      lastUpdated: now,
+    });
+  }
+
+  // Update DepartmentScore: aggregate all XP for this employee's department
+  const departmentId = emp[0].departmentId;
+
+  const deptXPResult = await db
+    .select({
+      totalXP: sql<number>`COALESCE(SUM(${employeeXP.xpTotal}), 0)`,
+    })
+    .from(employeeXP)
+    .innerJoin(employees, and(
+      eq(employeeXP.employeeId, employees.id),
+      eq(employees.isActive, true)
+    ))
+    .where(
+      and(
+        eq(employees.departmentId, departmentId),
+        eq(employeeXP.companyId, companyId)
+      )
+    );
+
+  const deptScore = Number(deptXPResult[0]?.totalXP ?? 0);
+
+  const existingDeptScore = await db
+    .select()
+    .from(departmentScores)
+    .where(
+      and(
+        eq(departmentScores.departmentId, departmentId),
+        eq(departmentScores.companyId, companyId)
+      )
+    )
+    .limit(1);
+
+  if (existingDeptScore.length > 0) {
+    await db
+      .update(departmentScores)
+      .set({ score: deptScore, lastUpdated: now })
+      .where(eq(departmentScores.id, existingDeptScore[0].id));
+  } else {
+    await db.insert(departmentScores).values({
+      companyId,
+      departmentId,
+      score: deptScore,
       lastUpdated: now,
     });
   }

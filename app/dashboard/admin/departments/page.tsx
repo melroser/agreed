@@ -14,6 +14,7 @@ export default function DepartmentsPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [toast, setToast] = useState("");
 
   const fetchDepartments = async () => {
     const res = await fetch("/api/departments");
@@ -24,17 +25,17 @@ export default function DepartmentsPage() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchDepartments();
-  }, []);
+  useEffect(() => { fetchDepartments(); }, []);
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 3000);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (!name.trim()) {
-      setError("Department name is required.");
-      return;
-    }
+    if (!name.trim()) { setError("Department name is required."); return; }
     setSubmitting(true);
     try {
       const res = await fetch("/api/departments", {
@@ -48,6 +49,7 @@ export default function DepartmentsPage() {
       } else {
         setName("");
         await fetchDepartments();
+        showToast("Department created!");
       }
     } catch {
       setError("Network error.");
@@ -56,50 +58,57 @@ export default function DepartmentsPage() {
   };
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Departments</h1>
+    <div className="max-w-2xl animate-fade-in">
+      <h1 className="page-title mb-6">🏢 Departments</h1>
 
       {/* Create form */}
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
-        <h2 className="text-lg font-semibold text-gray-700 mb-4">Add Department</h2>
+      <form onSubmit={handleSubmit} className="section-card mb-8">
+        <h2 className="section-title">Add Department</h2>
         <div className="flex gap-3">
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Department name"
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+            className="input flex-1"
           />
-          <button
-            type="submit"
-            disabled={submitting}
-            className="px-6 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors disabled:opacity-50"
-          >
-            {submitting ? "Adding..." : "Add"}
+          <button type="submit" disabled={submitting} className="btn-primary">
+            {submitting ? (
+              <span className="inline-flex items-center gap-2">
+                <span className="spinner !border-white/30 !border-t-white !w-4 !h-4" />
+                Adding...
+              </span>
+            ) : "Add"}
           </button>
         </div>
-        {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+        {error && <p className="text-red-600 text-sm mt-2 animate-fade-in">{error}</p>}
       </form>
 
       {/* List */}
       {loading ? (
-        <p className="text-gray-400">Loading departments...</p>
+        <div className="flex items-center gap-2 text-gray-400 py-8 justify-center">
+          <div className="spinner" />
+          <span className="text-sm">Loading departments...</span>
+        </div>
       ) : departments.length === 0 ? (
-        <p className="text-gray-400">No departments yet. Create one above.</p>
+        <div className="text-center py-12 text-gray-400">
+          <div className="text-4xl mb-2">🏢</div>
+          <p>No departments yet. Create one above.</p>
+        </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="table-container">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="table-header">
               <tr>
-                <th className="text-left px-4 py-3 font-medium text-gray-600">Name</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-600">Created</th>
+                <th>Name</th>
+                <th>Created</th>
               </tr>
             </thead>
             <tbody>
-              {departments.map((dept) => (
-                <tr key={dept.id} className="border-b border-gray-100 last:border-0">
-                  <td className="px-4 py-3 font-medium text-gray-800">{dept.name}</td>
-                  <td className="px-4 py-3 text-gray-500">
+              {departments.map((dept, i) => (
+                <tr key={dept.id} className="table-row" style={{ animationDelay: `${i * 50}ms` }}>
+                  <td className="font-medium text-gray-800">{dept.name}</td>
+                  <td className="text-gray-500">
                     {new Date(dept.createdAt).toLocaleDateString()}
                   </td>
                 </tr>
@@ -108,6 +117,9 @@ export default function DepartmentsPage() {
           </table>
         </div>
       )}
+
+      {/* Toast */}
+      {toast && <div className="toast-success">✓ {toast}</div>}
     </div>
   );
 }

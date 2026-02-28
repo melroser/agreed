@@ -108,7 +108,7 @@ export default function AssessmentPage() {
   // --- DONE SCREEN ---
   if (phase === "done") {
     return (
-      <div className="max-w-lg mx-auto text-center py-16">
+      <div className="max-w-lg mx-auto text-center py-16 animate-scale-in">
         <div className="text-6xl mb-4">🎉</div>
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Assessment Complete!</h1>
         <p className="text-gray-500 mb-6">
@@ -129,7 +129,7 @@ export default function AssessmentPage() {
         <div>
           <button
             onClick={() => { setPhase("select"); setSelectedEmployeeId(""); setQuestions([]); setAnswers({}); }}
-            className="px-6 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors"
+            className="btn-primary"
           >
             Assess Another Employee
           </button>
@@ -141,8 +141,8 @@ export default function AssessmentPage() {
   // --- SUBMITTING SCREEN ---
   if (phase === "submitting") {
     return (
-      <div className="max-w-lg mx-auto text-center py-16">
-        <div className="text-4xl mb-4 animate-bounce">📊</div>
+      <div className="max-w-lg mx-auto text-center py-16 animate-fade-in">
+        <div className="spinner-lg mx-auto mb-4" />
         <p className="text-gray-500">Submitting assessment and calculating XP...</p>
       </div>
     );
@@ -151,7 +151,7 @@ export default function AssessmentPage() {
   // --- ASSESSMENT SCREEN ---
   if (phase === "assess" && currentQ) {
     return (
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-2xl mx-auto animate-fade-in">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-xl font-bold text-gray-800">📝 Skill Assessment</h1>
@@ -193,7 +193,7 @@ export default function AssessmentPage() {
         </div>
 
         {/* Current question */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+        <div className="section-card mb-6">
           <p className="text-sm text-gray-400 mb-2">Question {currentIndex + 1} of {questions.length}</p>
           <p className="text-lg font-medium text-gray-800 mb-6">{currentQ.prompt}</p>
 
@@ -223,7 +223,7 @@ export default function AssessmentPage() {
           <button
             onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
             disabled={currentIndex === 0}
-            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 disabled:opacity-30 transition-colors"
+            className="btn-secondary text-sm disabled:opacity-30"
           >
             ← Previous
           </button>
@@ -231,7 +231,7 @@ export default function AssessmentPage() {
           {currentIndex < questions.length - 1 ? (
             <button
               onClick={() => setCurrentIndex((i) => Math.min(questions.length - 1, i + 1))}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+              className="btn-primary text-sm"
             >
               Next →
             </button>
@@ -239,7 +239,7 @@ export default function AssessmentPage() {
             <button
               onClick={handleSubmit}
               disabled={!allAnswered}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors disabled:opacity-50"
+              className="btn-primary text-sm"
             >
               {allAnswered ? "Submit Assessment ✨" : `Answer all questions (${answeredCount}/${questions.length})`}
             </button>
@@ -253,14 +253,16 @@ export default function AssessmentPage() {
 
   // --- EMPLOYEE SELECT SCREEN ---
   return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-800 mb-2">📝 Skill Assessment</h1>
+    <div className="max-w-2xl mx-auto animate-fade-in">
+      <h1 className="page-title mb-2">📝 Skill Assessment</h1>
       <p className="text-gray-500 mb-8">Select an employee to begin their green skills assessment.</p>
 
       {loading ? (
-        <p className="text-gray-400">Loading employees...</p>
+        <div className="flex items-center gap-2 text-gray-400 py-8 justify-center">
+          <div className="spinner" /><span className="text-sm">Loading employees...</span>
+        </div>
       ) : employees.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
+        <div className="card p-8 text-center">
           <p className="text-gray-400">No employees found. Add employees in the Admin view first.</p>
         </div>
       ) : (

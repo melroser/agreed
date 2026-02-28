@@ -8,11 +8,11 @@ import { calculateCompanyGaps, type SkillGap, type Severity } from "@/lib/gap-ca
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id || !session.user.companyId) {
+  if (!session?.user?.id || !(session.user as any).companyId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const companyId = session.user.companyId;
+  const companyId = (session.user as any).companyId;
 
   // Get total active employees
   const activeEmployees = await db

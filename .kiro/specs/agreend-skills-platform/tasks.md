@@ -128,8 +128,8 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
   - Add "Export CSV" button on dashboard
   - _Requirements: 14.1, 14.2, 14.3, 14.4, 14.5_
 
-- [ ] 10. Employee View: RPG Skill Tree (THE WOW FACTOR)
-  - [ ] 10.1 Create skill tree visualization
+- [x] 10. Employee View: RPG Skill Tree (THE WOW FACTOR)
+  - [x] 10.1 Create skill tree visualization
     - Build `app/dashboard/employee/skill-tree/page.tsx`
     - API route `app/api/game/tree/[employeeId]/route.ts`
     - Group skills by family (4 columns or tabs)
@@ -137,18 +137,18 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
     - Use RPG-style visuals: locked/unlocked skills, progress bars, level-up animations
     - _Requirements: 15.1, 15.2, 15.3, 15.4_
 
-  - [ ] 10.2 Add "Money Saved" gamification
+  - [x] 10.2 Add "Money Saved" gamification
     - Calculate estimated cost savings: gap closures × $500 per skill level (made-up but compelling)
     - Display prominently on skill tree: "Your team has saved $X,XXX in training costs!"
     - _Requirements: (hackathon wow factor)_
 
-- [ ] 11. Employee View: Leaderboard
-  - [ ] 11.1 Calculate department scores
+- [x] 11. Employee View: Leaderboard
+  - [x] 11.1 Calculate department scores
     - Aggregate EmployeeXP by department
     - Update DepartmentScore table on assessment submission
     - _Requirements: 16.2, 16.5_
 
-  - [ ] 11.2 Create leaderboard page
+  - [x] 11.2 Create leaderboard page
     - Build `app/dashboard/employee/leaderboard/page.tsx`
     - API route `app/api/game/leaderboard/route.ts`
     - Display departments ranked by score with medals (🥇🥈🥉)
@@ -156,21 +156,21 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
     - Add fun animations for top 3
     - _Requirements: 16.3, 16.4_
 
-- [ ] 12. Styling and Polish (MAKE IT PRETTY)
-  - [ ] 12.1 Apply consistent design system
+- [-] 12. Styling and Polish (MAKE IT PRETTY)
+  - [x] 12.1 Apply consistent design system
     - Use TailwindCSS with green/eco color palette
     - Add company logo placeholder (can be customized per company)
     - Ensure responsive design for desktop demo
     - _Requirements: 3.4_
 
-  - [ ] 12.2 Add micro-interactions
+  - [x] 12.2 Add micro-interactions
     - Loading spinners during API calls
     - Success toasts after actions
     - Smooth transitions between views
     - Hover effects on buttons and cards
     - _Requirements: (hackathon polish)_
 
-  - [ ] 12.3 Create "God Mode" demo data seeder
+  - [x] 12.3 Create "God Mode" demo data seeder
     - Create hidden API route `app/api/dev/seed-demo/route.ts`
     - When hit, it should:
       1. Delete all existing employees and assessments for the company

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
 export type ViewMode = "admin" | "employee";
@@ -24,20 +23,20 @@ export default function ViewToggle() {
   return (
     <button
       onClick={toggle}
-      className="flex items-center gap-2 px-4 py-2 rounded-lg border border-green-200 bg-white hover:bg-green-50 transition-colors text-sm font-medium"
+      className="flex items-center gap-2 w-full px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-white transition-all duration-150 text-sm"
       aria-label={`Switch to ${current === "admin" ? "Employee" : "Admin"} view`}
     >
-      <span className={current === "admin" ? "text-green-700 font-semibold" : "text-gray-400"}>
+      <span className={`transition-colors duration-150 ${current === "admin" ? "text-green-700 font-semibold" : "text-gray-400"}`}>
         Admin
       </span>
-      <div className="relative w-10 h-5 bg-green-100 rounded-full">
+      <div className="relative w-10 h-5 bg-green-100 rounded-full mx-auto flex-shrink-0">
         <div
-          className={`absolute top-0.5 w-4 h-4 rounded-full bg-green-600 transition-transform ${
+          className={`absolute top-0.5 w-4 h-4 rounded-full bg-green-600 transition-all duration-200 ease-out shadow-sm ${
             current === "employee" ? "translate-x-5" : "translate-x-0.5"
           }`}
         />
       </div>
-      <span className={current === "employee" ? "text-green-700 font-semibold" : "text-gray-400"}>
+      <span className={`transition-colors duration-150 ${current === "employee" ? "text-green-700 font-semibold" : "text-gray-400"}`}>
         Employee
       </span>
     </button>

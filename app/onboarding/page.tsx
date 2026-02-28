@@ -15,18 +15,17 @@ export default function OnboardingPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.replace("/");
-    }
-    if (status === "authenticated" && session?.user?.companyId) {
-      router.replace("/dashboard");
-    }
+    if (status === "unauthenticated") router.replace("/");
+    if (status === "authenticated" && session?.user?.companyId) router.replace("/dashboard");
   }, [status, session, router]);
 
   if (status === "loading") {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-green-50 to-white">
-        <p className="text-gray-400">Loading...</p>
+      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-eco-50 via-white to-emerald-50/30">
+        <div className="text-center animate-fade-in">
+          <div className="spinner-lg mx-auto mb-3" />
+          <p className="text-gray-400 text-sm">Loading...</p>
+        </div>
       </main>
     );
   }
@@ -59,7 +58,6 @@ export default function OnboardingPage() {
         return;
       }
 
-      // Refresh the session so companyId/role are updated in the JWT
       await update();
       router.push("/dashboard");
     } catch {
@@ -69,19 +67,24 @@ export default function OnboardingPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-green-50 to-white">
-      <div className="w-full max-w-md px-6">
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-eco-50 via-white to-emerald-50/30 relative overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-200/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-emerald-200/20 rounded-full blur-3xl" />
+      </div>
+
+      <div className="w-full max-w-md px-6 relative z-10 animate-slide-up">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-green-700">🌱 aGreend</h1>
-          <p className="mt-2 text-gray-600">Set up your company to get started</p>
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-2xl shadow-lg shadow-green-200/50 mb-4">
+            🌱
+          </div>
+          <h1 className="text-3xl font-bold text-green-800 tracking-tight">Welcome to aGreend</h1>
+          <p className="mt-2 text-gray-500">Set up your company to get started</p>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white rounded-xl shadow-sm border border-green-100 p-8 space-y-6"
-        >
+        <form onSubmit={handleSubmit} className="card p-8 space-y-6">
           <div>
-            <label htmlFor="company-name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="company-name" className="block text-sm font-medium text-gray-700 mb-1.5">
               Company Name
             </label>
             <input
@@ -91,39 +94,40 @@ export default function OnboardingPage() {
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. GreenCorp"
               maxLength={100}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
+              className="input"
             />
           </div>
 
           <div>
-            <label htmlFor="industry" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="industry" className="block text-sm font-medium text-gray-700 mb-1.5">
               Industry
             </label>
             <select
               id="industry"
               value={industry}
               onChange={(e) => setIndustry(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors bg-white"
+              className="select"
             >
               <option value="">Select an industry</option>
               {INDUSTRIES.map((ind) => (
-                <option key={ind} value={ind}>
-                  {ind}
-                </option>
+                <option key={ind} value={ind}>{ind}</option>
               ))}
             </select>
           </div>
 
           {error && (
-            <p className="text-red-600 text-sm" role="alert">{error}</p>
+            <p className="text-red-600 text-sm animate-fade-in" role="alert">{error}</p>
           )}
 
-          <button
-            type="submit"
-            disabled={submitting}
-            className="w-full py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {submitting ? "Creating..." : "Create Company"}
+          <button type="submit" disabled={submitting} className="btn-primary w-full py-3 text-base">
+            {submitting ? (
+              <span className="inline-flex items-center gap-2">
+                <span className="spinner !border-white/30 !border-t-white !w-4 !h-4" />
+                Creating...
+              </span>
+            ) : (
+              "Create Company →"
+            )}
           </button>
         </form>
       </div>
