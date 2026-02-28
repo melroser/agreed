@@ -20,8 +20,8 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
   - Run initial migration
   - _Requirements: 18.1, 18.3, 18.4, 18.5_
 
-- [ ] 2. Google SSO Authentication - STOP WHEN LOGIN WORKS
-  - [ ] 2.1 Configure Auth.js with Google provider
+- [x] 2. Google SSO Authentication - STOP WHEN LOGIN WORKS
+  - [x] 2.1 Configure Auth.js with Google provider
     - Create `app/api/auth/[...nextauth]/route.ts`
     - Set up Google OAuth credentials in `.env.local`
     - Configure JWT strategy (no database sessions)
@@ -29,13 +29,13 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
     - **STOP HERE - Auth is 100% complete once login works**
     - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-  - [ ] 2.2 Create landing page with Google sign-in
+  - [x] 2.2 Create landing page with Google sign-in
     - Build landing page at `app/page.tsx` with aGreend branding and value prop
     - Add "Sign in with Google" button
     - Show user name after login to verify session works
     - _Requirements: 1.1, 1.2, 1.3_
 
-- [ ] 3. Company Onboarding (Minimal)
+- [-] 3. Company Onboarding (Minimal)
   - Create onboarding form at `app/onboarding/page.tsx`
   - Collect only: company name, industry (dropdown: Tech, Manufacturing, Retail, Healthcare, Other)
   - Create API route `app/api/company/route.ts` (POST)
@@ -183,7 +183,6 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
     - Add hidden button in dev mode or just hit the URL before demo
     - **This is your insurance policy - perfect demo data in 1 click**
     - _Requirements: (demo preparation)_
-
 - [ ] 13. Final Demo Preparation
   - Test complete flow: Admin creates role → Admin creates employee → Employee takes assessment → View skill tree → View leaderboard → Admin views dashboard → Admin exports CSV
   - Prepare 2-3 minute demo script highlighting:
