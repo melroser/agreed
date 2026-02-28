@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-interface Department { id: string; name: string; }
+import { Briefcase, Check } from "lucide-react";
 interface Role {
   id: string;
   departmentId: string;
@@ -75,7 +74,7 @@ export default function RolesPage() {
 
   return (
     <div className="max-w-3xl animate-fade-in">
-      <h1 className="page-title mb-6">👔 Roles</h1>
+      <h1 className="page-title mb-6 flex items-center gap-2"><Briefcase className="w-6 h-6" /> Roles</h1>
 
       <form onSubmit={handleSubmit} className="section-card mb-8 space-y-4">
         <h2 className="section-title">Add Role</h2>
@@ -119,7 +118,7 @@ export default function RolesPage() {
         </div>
       ) : roles.length === 0 ? (
         <div className="text-center py-12 text-gray-400">
-          <div className="text-4xl mb-2">👔</div>
+          <Briefcase className="w-10 h-10 mx-auto mb-2 text-gray-300" />
           <p>No roles yet. Create one above.</p>
         </div>
       ) : (
@@ -144,7 +143,7 @@ export default function RolesPage() {
         </div>
       )}
 
-      {toast && <div className="toast-success">✓ {toast}</div>}
+      {toast && <div className="toast-success"><Check className="w-4 h-4 inline" /> {toast}</div>}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Trophy, Medal } from "lucide-react";
 
 interface LeaderboardEntry {
   rank: number;
@@ -12,7 +13,11 @@ interface LeaderboardEntry {
   averageXP: number;
 }
 
-const MEDALS: Record<number, string> = { 1: "🥇", 2: "🥈", 3: "🥉" };
+const MEDALS: Record<number, React.ReactNode> = {
+  1: <Medal className="w-6 h-6 text-yellow-500" />,
+  2: <Medal className="w-6 h-6 text-gray-400" />,
+  3: <Medal className="w-6 h-6 text-orange-400" />,
+};
 
 const PODIUM_STYLES: Record<number, string> = {
   1: "from-yellow-400 via-amber-300 to-yellow-500 shadow-amber-200",
@@ -37,7 +42,7 @@ export default function LeaderboardPage() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
-          <div className="text-5xl mb-3 animate-bounce">🏆</div>
+          <Trophy className="w-12 h-12 text-yellow-400 mx-auto mb-3 animate-bounce" />
           <p className="text-gray-400">Loading leaderboard...</p>
         </div>
       </div>
@@ -59,13 +64,13 @@ export default function LeaderboardPage() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">🏆 Department Leaderboard</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-2"><Trophy className="w-7 h-7 text-yellow-500" /> Department Leaderboard</h1>
         <p className="text-gray-500">Departments ranked by total green skills XP</p>
       </div>
 
       {leaderboard.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <div className="text-5xl mb-4">🏆</div>
+          <Trophy className="w-12 h-12 text-gray-300 mx-auto mb-4" />
           <p className="text-gray-400 text-lg">No scores yet</p>
           <p className="text-gray-400 text-sm mt-1">
             Complete assessments to start earning XP for your department!
@@ -148,7 +153,7 @@ function LeaderboardRow({ entry, maxScore }: { entry: LeaderboardEntry; maxScore
       {/* Rank */}
       <div className="w-10 text-center">
         {medal ? (
-          <span className="text-2xl">{medal}</span>
+          <span>{medal}</span>
         ) : (
           <span className="text-lg font-bold text-gray-400">#{entry.rank}</span>
         )}

@@ -5,6 +5,19 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   ResponsiveContainer, Cell,
 } from "recharts";
+import {
+  BarChart3,
+  Users,
+  AlertTriangle,
+  AlertCircle,
+  CircleDot,
+  Zap,
+  Download,
+  ShieldAlert,
+  CheckCircle2,
+  CircleCheck,
+  Trophy,
+} from "lucide-react";
 
 interface KPI {
   totalEmployees: number;
@@ -88,7 +101,7 @@ export default function AdminDashboardPage() {
     return (
       <div className="space-y-8 animate-fade-in">
         <div className="flex items-center justify-between">
-          <h1 className="page-title">📊 Skills Gap Dashboard</h1>
+          <h1 className="page-title flex items-center gap-2"><BarChart3 className="w-6 h-6" /> Skills Gap Dashboard</h1>
           <div className="flex items-center gap-2">
             <button
               onClick={seedDemo}
@@ -99,20 +112,20 @@ export default function AdminDashboardPage() {
               {seeding ? (
                 <><span className="spinner !w-3 !h-3" /> Seeding...</>
               ) : (
-                <>⚡ Demo Data</>
+                <><Zap className="w-4 h-4" /> Demo Data</>
               )}
             </button>
           </div>
         </div>
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="text-5xl mb-4">📊</div>
+          <BarChart3 className="w-12 h-12 text-gray-300 mb-4" />
           <p className="text-red-500 mb-2">{error ?? "No data available"}</p>
-          <p className="text-gray-400 text-sm">Try signing out and back in, or click ⚡ Demo Data above.</p>
+          <p className="text-gray-400 text-sm">Try signing out and back in, or click Demo Data above.</p>
         </div>
         {toast && (
           <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
             <div className="bg-gray-900 text-white px-5 py-3 rounded-xl shadow-lg text-sm flex items-center gap-2">
-              <span>✅</span> {toast}
+              <CircleCheck className="w-4 h-4 text-green-400" /> {toast}
             </div>
           </div>
         )}
@@ -125,7 +138,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-8 animate-fade-in">
       <div className="flex items-center justify-between">
-        <h1 className="page-title">📊 Skills Gap Dashboard</h1>
+        <h1 className="page-title flex items-center gap-2"><BarChart3 className="w-6 h-6" /> Skills Gap Dashboard</h1>
         <div className="flex items-center gap-2">
           <button
             onClick={seedDemo}
@@ -136,24 +149,24 @@ export default function AdminDashboardPage() {
             {seeding ? (
               <><span className="spinner !w-3 !h-3" /> Seeding...</>
             ) : (
-              <>⚡ Demo Data</>
+              <><Zap className="w-4 h-4" /> Demo Data</>
             )}
           </button>
           <button
             onClick={() => { window.location.href = "/api/export/gaps"; }}
             className="btn-primary flex items-center gap-2"
           >
-            📥 Export CSV
+            <Download className="w-4 h-4" /> Export CSV
           </button>
         </div>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard label="Total Employees" value={data.kpi.totalEmployees} icon="👥" color="bg-blue-50 text-blue-700 border-blue-100" />
-        <KPICard label="Total Gaps" value={data.kpi.totalGaps} icon="⚠️" color="bg-yellow-50 text-yellow-700 border-yellow-100" />
-        <KPICard label="Critical Gaps" value={data.kpi.criticalCount} icon="🔴" color="bg-red-50 text-red-700 border-red-100" />
-        <KPICard label="Moderate Gaps" value={data.kpi.moderateCount} icon="🟡" color="bg-amber-50 text-amber-700 border-amber-100" />
+        <KPICard label="Total Employees" value={data.kpi.totalEmployees} icon={<Users className="w-5 h-5" />} color="bg-blue-50 text-blue-700 border-blue-100" />
+        <KPICard label="Total Gaps" value={data.kpi.totalGaps} icon={<AlertTriangle className="w-5 h-5" />} color="bg-yellow-50 text-yellow-700 border-yellow-100" />
+        <KPICard label="Critical Gaps" value={data.kpi.criticalCount} icon={<AlertCircle className="w-5 h-5" />} color="bg-red-50 text-red-700 border-red-100" />
+        <KPICard label="Moderate Gaps" value={data.kpi.moderateCount} icon={<CircleDot className="w-5 h-5" />} color="bg-amber-50 text-amber-700 border-amber-100" />
       </div>
 
       {/* Gap Distribution Bar Chart */}
@@ -198,7 +211,7 @@ export default function AdminDashboardPage() {
                       <span className="text-xs font-semibold">
                         {f.critical > 0 && <span className="text-red-700">{f.critical}C </span>}
                         {f.moderate > 0 && <span className="text-amber-700">{f.moderate}M</span>}
-                        {f.critical === 0 && f.moderate === 0 && <span className="text-green-600">✓</span>}
+                        {f.critical === 0 && f.moderate === 0 && <span className="text-green-600"><CheckCircle2 className="w-4 h-4 inline" /></span>}
                       </span>
                     </td>
                   ))}
@@ -212,7 +225,7 @@ export default function AdminDashboardPage() {
       {/* High Risk Roles Table */}
       {data.highRiskRoles.length > 0 && (
         <div className="section-card">
-          <h2 className="section-title">🚨 High Risk Roles</h2>
+          <h2 className="section-title flex items-center gap-2"><ShieldAlert className="w-5 h-5 text-red-500" /> High Risk Roles</h2>
           <div className="table-container border-0 shadow-none">
             <table className="w-full text-sm">
               <thead className="table-header">
@@ -223,7 +236,7 @@ export default function AdminDashboardPage() {
               <tbody>
                 {data.highRiskRoles.map((r, i) => (
                   <tr key={r.role} className={`table-row ${i === 0 ? "bg-red-50/50" : ""}`}>
-                    <td className="font-bold text-gray-400 text-lg">{i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉"}</td>
+                    <td className="font-bold text-gray-400 text-lg">{i === 0 ? <Trophy className="w-5 h-5 text-yellow-500 inline" /> : i === 1 ? <Trophy className="w-5 h-5 text-gray-400 inline" /> : <Trophy className="w-5 h-5 text-orange-400 inline" />}</td>
                     <td className="font-medium text-gray-700">{r.role}</td>
                     <td className="text-center"><span className="badge-red">{r.criticalGaps}</span></td>
                     <td className="text-center text-gray-600">{r.employeeCount}</td>
@@ -239,14 +252,14 @@ export default function AdminDashboardPage() {
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
           <div className="bg-gray-900 text-white px-5 py-3 rounded-xl shadow-lg text-sm flex items-center gap-2">
-            <span>✅</span> {toast}
+            <CircleCheck className="w-4 h-4 text-green-400" /> {toast}
           </div>
         </div>
       )}
 
       {data.kpi.totalEmployees === 0 && (
         <div className="text-center py-12 text-gray-400">
-          <div className="text-5xl mb-3">📊</div>
+          <BarChart3 className="w-12 h-12 mx-auto mb-3 text-gray-300" />
           <p className="text-lg">No employees yet.</p>
           <p className="text-sm mt-1">Add departments, roles, and employees to see gap analytics.</p>
         </div>
@@ -255,11 +268,11 @@ export default function AdminDashboardPage() {
   );
 }
 
-function KPICard({ label, value, icon, color }: { label: string; value: number; icon: string; color: string }) {
+function KPICard({ label, value, icon, color }: { label: string; value: number; icon: React.ReactNode; color: string }) {
   return (
     <div className={`rounded-xl border p-5 transition-all duration-200 hover:shadow-md ${color}`}>
       <div className="flex items-center justify-between">
-        <span className="text-2xl">{icon}</span>
+        <span>{icon}</span>
         <span className="text-3xl font-bold">{value}</span>
       </div>
       <p className="mt-2 text-sm font-medium opacity-80">{label}</p>

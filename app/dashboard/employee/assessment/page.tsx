@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Sprout, BookOpen, Zap, Globe, ClipboardList, Star, CircleCheck, Sparkles } from "lucide-react";
 
 interface Employee {
   id: string;
@@ -17,10 +18,10 @@ interface Question {
 }
 
 const LEVELS = [
-  { value: 1, label: "Curious Explorer", emoji: "🌱", color: "border-emerald-300 bg-emerald-50 text-emerald-800" },
-  { value: 2, label: "Engaged Learner", emoji: "📗", color: "border-teal-300 bg-teal-50 text-teal-800" },
-  { value: 3, label: "Practical Implementer", emoji: "⚡", color: "border-green-400 bg-green-50 text-green-800" },
-  { value: 4, label: "Conscious Changemaker", emoji: "🌍", color: "border-green-600 bg-green-100 text-green-900" },
+  { value: 1, label: "Curious Explorer", icon: <Sprout className="w-5 h-5" />, color: "border-emerald-300 bg-emerald-50 text-emerald-800" },
+  { value: 2, label: "Engaged Learner", icon: <BookOpen className="w-5 h-5" />, color: "border-teal-300 bg-teal-50 text-teal-800" },
+  { value: 3, label: "Practical Implementer", icon: <Zap className="w-5 h-5" />, color: "border-green-400 bg-green-50 text-green-800" },
+  { value: 4, label: "Conscious Changemaker", icon: <Globe className="w-5 h-5" />, color: "border-green-600 bg-green-100 text-green-900" },
 ];
 
 export default function AssessmentPage() {
@@ -109,20 +110,20 @@ export default function AssessmentPage() {
   if (phase === "done") {
     return (
       <div className="max-w-lg mx-auto text-center py-16 animate-scale-in">
-        <div className="text-6xl mb-4">🎉</div>
+      <div className="text-6xl mb-4"><Sparkles className="w-14 h-14 mx-auto text-green-500" /></div>
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Assessment Complete!</h1>
         <p className="text-gray-500 mb-6">
           {selectedEmployee?.name}&apos;s skills have been recorded.
         </p>
         {xpEarned > 0 && (
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-yellow-50 border border-yellow-200 rounded-xl mb-6">
-            <span className="text-2xl">⭐</span>
+            <Star className="w-6 h-6 text-yellow-500" />
             <span className="text-lg font-bold text-yellow-700">+{xpEarned} XP earned!</span>
           </div>
         )}
         {xpEarned === 0 && (
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-green-50 border border-green-200 rounded-xl mb-6">
-            <span className="text-2xl">✅</span>
+            <CircleCheck className="w-6 h-6 text-green-500" />
             <span className="text-lg font-semibold text-green-700">Baseline assessment recorded</span>
           </div>
         )}
@@ -154,7 +155,7 @@ export default function AssessmentPage() {
       <div className="max-w-2xl mx-auto animate-fade-in">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-xl font-bold text-gray-800">📝 Skill Assessment</h1>
+            <h1 className="text-xl font-bold text-gray-800 flex items-center gap-2"><ClipboardList className="w-5 h-5" /> Skill Assessment</h1>
             <p className="text-sm text-gray-500">
               {selectedEmployee?.name} &middot; {roleFunction}
             </p>
@@ -209,7 +210,7 @@ export default function AssessmentPage() {
                 }`}
                 aria-pressed={answers[currentQ.id] === lvl.value}
               >
-                <span className="text-xl">{lvl.emoji}</span>
+                <span className="text-xl">{lvl.icon}</span>
                 <div>
                   <div className="text-sm font-semibold">{lvl.value}. {lvl.label}</div>
                 </div>
@@ -241,7 +242,7 @@ export default function AssessmentPage() {
               disabled={!allAnswered}
               className="btn-primary text-sm"
             >
-              {allAnswered ? "Submit Assessment ✨" : `Answer all questions (${answeredCount}/${questions.length})`}
+              {allAnswered ? <span className="inline-flex items-center gap-1">Submit Assessment <Sparkles className="w-4 h-4" /></span> : `Answer all questions (${answeredCount}/${questions.length})`}
             </button>
           )}
         </div>
@@ -254,7 +255,7 @@ export default function AssessmentPage() {
   // --- EMPLOYEE SELECT SCREEN ---
   return (
     <div className="max-w-2xl mx-auto animate-fade-in">
-      <h1 className="page-title mb-2">📝 Skill Assessment</h1>
+      <h1 className="page-title mb-2 flex items-center gap-2"><ClipboardList className="w-6 h-6" /> Skill Assessment</h1>
       <p className="text-gray-500 mb-8">Select an employee to begin their green skills assessment.</p>
 
       {loading ? (

@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { Leaf } from "lucide-react";
 
 const INDUSTRIES = ["Tech", "Manufacturing", "Retail", "Healthcare", "Other"];
 
@@ -75,8 +76,8 @@ export default function OnboardingPage() {
 
       <div className="w-full max-w-md px-6 relative z-10 animate-slide-up">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-2xl shadow-lg shadow-green-200/50 mb-4">
-            🌱
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-lg shadow-green-200/50 mb-4">
+            <Leaf className="w-7 h-7" />
           </div>
           <h1 className="text-3xl font-bold text-green-800 tracking-tight">Welcome to aGreend</h1>
           <p className="mt-2 text-gray-500">Set up your company to get started</p>

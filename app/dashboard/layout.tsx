@@ -2,21 +2,32 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import ViewToggle from "@/components/ViewToggle";
 import Link from "next/link";
+import {
+  BarChart3,
+  Building2,
+  Briefcase,
+  Users,
+  TreePine,
+  ClipboardList,
+  Trophy,
+  Leaf,
+  LogOut,
+} from "lucide-react";
 
 const adminLinks = [
-  { href: "/dashboard/admin", label: "Dashboard", icon: "📊" },
-  { href: "/dashboard/admin/departments", label: "Departments", icon: "🏢" },
-  { href: "/dashboard/admin/roles", label: "Roles", icon: "👔" },
-  { href: "/dashboard/admin/employees", label: "Employees", icon: "👥" },
+  { href: "/dashboard/admin", label: "Dashboard", icon: <BarChart3 className="w-5 h-5" /> },
+  { href: "/dashboard/admin/departments", label: "Departments", icon: <Building2 className="w-5 h-5" /> },
+  { href: "/dashboard/admin/roles", label: "Roles", icon: <Briefcase className="w-5 h-5" /> },
+  { href: "/dashboard/admin/employees", label: "Employees", icon: <Users className="w-5 h-5" /> },
 ];
 
 const employeeLinks = [
-  { href: "/dashboard/employee/skill-tree", label: "Skill Tree", icon: "🌳" },
-  { href: "/dashboard/employee/assessment", label: "Assessment", icon: "📝" },
-  { href: "/dashboard/employee/leaderboard", label: "Leaderboard", icon: "🏆" },
+  { href: "/dashboard/employee/skill-tree", label: "Skill Tree", icon: <TreePine className="w-5 h-5" /> },
+  { href: "/dashboard/employee/assessment", label: "Assessment", icon: <ClipboardList className="w-5 h-5" /> },
+  { href: "/dashboard/employee/leaderboard", label: "Leaderboard", icon: <Trophy className="w-5 h-5" /> },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -52,8 +63,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* Logo area with company branding placeholder */}
         <div className="p-5 border-b border-gray-100">
           <Link href="/dashboard/admin" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white text-lg shadow-sm group-hover:shadow-md transition-shadow">
-              🌱
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-sm group-hover:shadow-md transition-shadow">
+              <Leaf className="w-5 h-5" />
             </div>
             <div>
               <span className="text-lg font-bold text-green-700 tracking-tight">aGreend</span>
@@ -75,7 +86,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-800"
                 }`}
               >
-                <span className="text-base">{link.icon}</span>
+                <span className="flex-shrink-0">{link.icon}</span>
                 {link.label}
               </Link>
             );
@@ -97,7 +108,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             onClick={() => signOut({ callbackUrl: "/" })}
             className="w-full text-xs text-gray-400 hover:text-red-500 transition-colors py-1 text-left px-1"
           >
-            Sign out →
+            <span className="inline-flex items-center gap-1"><LogOut className="w-3 h-3" /> Sign out</span>
           </button>
         </div>
       </aside>

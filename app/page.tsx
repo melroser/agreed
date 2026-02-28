@@ -3,6 +3,7 @@
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { Leaf, BarChart3, TreePine, Trophy } from "lucide-react";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -29,8 +30,8 @@ export default function Home() {
       <div className="text-center max-w-2xl px-6 relative z-10 animate-fade-in">
         {/* Logo */}
         <div className="mb-10">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-3xl shadow-lg shadow-green-200/50 mb-5">
-            🌱
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-lg shadow-green-200/50 mb-5">
+            <Leaf className="w-8 h-8" />
           </div>
           <h1 className="text-5xl font-bold text-green-800 tracking-tight">
             aGreend
@@ -50,12 +51,12 @@ export default function Home() {
         {/* Features */}
         <div className="grid grid-cols-3 gap-4 mb-10 max-w-lg mx-auto">
           {[
-            { icon: "📊", label: "Gap Analytics" },
-            { icon: "🌳", label: "Skill Trees" },
-            { icon: "🏆", label: "Leaderboards" },
+            { icon: <BarChart3 className="w-6 h-6 text-green-600" />, label: "Gap Analytics" },
+            { icon: <TreePine className="w-6 h-6 text-green-600" />, label: "Skill Trees" },
+            { icon: <Trophy className="w-6 h-6 text-green-600" />, label: "Leaderboards" },
           ].map((f) => (
             <div key={f.label} className="card p-3 text-center">
-              <div className="text-2xl mb-1">{f.icon}</div>
+              <div className="flex justify-center mb-1">{f.icon}</div>
               <div className="text-xs text-gray-500 font-medium">{f.label}</div>
             </div>
           ))}

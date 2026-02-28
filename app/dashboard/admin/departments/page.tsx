@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Building2, Check } from "lucide-react";
 
 interface Department {
   id: string;
@@ -59,7 +60,7 @@ export default function DepartmentsPage() {
 
   return (
     <div className="max-w-2xl animate-fade-in">
-      <h1 className="page-title mb-6">🏢 Departments</h1>
+      <h1 className="page-title mb-6 flex items-center gap-2"><Building2 className="w-6 h-6" /> Departments</h1>
 
       {/* Create form */}
       <form onSubmit={handleSubmit} className="section-card mb-8">
@@ -92,7 +93,7 @@ export default function DepartmentsPage() {
         </div>
       ) : departments.length === 0 ? (
         <div className="text-center py-12 text-gray-400">
-          <div className="text-4xl mb-2">🏢</div>
+          <Building2 className="w-10 h-10 mx-auto mb-2 text-gray-300" />
           <p>No departments yet. Create one above.</p>
         </div>
       ) : (
@@ -119,7 +120,7 @@ export default function DepartmentsPage() {
       )}
 
       {/* Toast */}
-      {toast && <div className="toast-success">✓ {toast}</div>}
+      {toast && <div className="toast-success"><Check className="w-4 h-4 inline" /> {toast}</div>}
     </div>
   );
 }

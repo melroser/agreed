@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import {
+  TreePine, Flame, Recycle, Settings, Lightbulb, Leaf,
+  Lock, Unlock, Star, BarChart3, DollarSign, Sprout,
+} from "lucide-react";
 
 interface SkillNode {
   skillId: string;
@@ -42,11 +46,11 @@ interface Employee {
   roleFunction: string;
 }
 
-const FAMILY_ICONS: Record<string, string> = {
-  "Climate Action": "🔥",
-  "Circular Economy": "♻️",
-  "Sustainable Operations": "⚙️",
-  "Green Innovation": "💡",
+const FAMILY_ICONS: Record<string, React.ReactNode> = {
+  "Climate Action": <Flame className="w-6 h-6" />,
+  "Circular Economy": <Recycle className="w-6 h-6" />,
+  "Sustainable Operations": <Settings className="w-6 h-6" />,
+  "Green Innovation": <Lightbulb className="w-6 h-6" />,
 };
 
 const FAMILY_COLORS: Record<string, { bg: string; border: string; accent: string; badge: string }> = {
@@ -104,7 +108,7 @@ function SkillCard({ skill, familyColor }: { skill: SkillNode; familyColor: type
       {/* Lock/unlock indicator */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className="text-lg">{isLocked ? "🔒" : skill.severity === "No Gap" ? "⭐" : "🔓"}</span>
+          <span className="text-lg">{isLocked ? <Lock className="w-5 h-5 text-gray-400" /> : skill.severity === "No Gap" ? <Star className="w-5 h-5 text-yellow-500" /> : <Unlock className="w-5 h-5 text-green-500" />}</span>
           <h4 className="text-sm font-semibold text-gray-800 leading-tight">{skill.skillName}</h4>
         </div>
         <span className={`text-xs px-2 py-0.5 rounded-full border ${SEVERITY_STYLES[skill.severity]}`}>
@@ -181,7 +185,7 @@ export default function SkillTreePage() {
   if (!treeData && !treeLoading) {
     return (
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">🌳 Skill Tree</h1>
+        <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2"><TreePine className="w-6 h-6" /> Skill Tree</h1>
         <p className="text-gray-500 mb-8">Select an employee to view their RPG skill tree.</p>
 
         {loading ? (
@@ -218,7 +222,7 @@ export default function SkillTreePage() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
-          <div className="text-4xl mb-3 animate-pulse">🌳</div>
+          <TreePine className="w-10 h-10 text-green-400 mx-auto mb-3 animate-pulse" />
           <p className="text-gray-400">Loading skill tree...</p>
         </div>
       </div>
@@ -242,8 +246,8 @@ export default function SkillTreePage() {
           >
             ← Back to employees
           </button>
-          <h1 className="text-2xl font-bold text-gray-800">
-            🌳 {treeData.employee.name}&apos;s Skill Tree
+          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+            <TreePine className="w-6 h-6" /> {treeData.employee.name}&apos;s Skill Tree
           </h1>
           <p className="text-sm text-gray-500">
             {treeData.employee.roleTitle} &middot; {treeData.employee.roleFunction}
@@ -255,23 +259,23 @@ export default function SkillTreePage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
           <div className="text-2xl font-bold text-green-600">{treeData.xpTotal}</div>
-          <div className="text-xs text-gray-500 mt-1">⭐ Total XP</div>
+          <div className="text-xs text-gray-500 mt-1 flex items-center justify-center gap-1"><Star className="w-3 h-3" /> Total XP</div>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
           <div className="text-2xl font-bold text-emerald-600">
             {treeData.unlockedSkills}/{treeData.totalSkills}
           </div>
-          <div className="text-xs text-gray-500 mt-1">🔓 Skills Unlocked</div>
+          <div className="text-xs text-gray-500 mt-1 flex items-center justify-center gap-1"><Unlock className="w-3 h-3" /> Skills Unlocked</div>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
           <div className="text-2xl font-bold text-blue-600">{completionPct}%</div>
-          <div className="text-xs text-gray-500 mt-1">📊 Completion</div>
+          <div className="text-xs text-gray-500 mt-1 flex items-center justify-center gap-1"><BarChart3 className="w-3 h-3" /> Completion</div>
         </div>
         <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-4 text-center text-white shadow-md">
           <div className="text-2xl font-bold">
             ${treeData.moneySaved.toLocaleString()}
           </div>
-          <div className="text-xs mt-1 opacity-90">💰 Training Value</div>
+          <div className="text-xs mt-1 opacity-90 flex items-center justify-center gap-1"><DollarSign className="w-3 h-3" /> Training Value</div>
         </div>
       </div>
 
@@ -293,9 +297,9 @@ export default function SkillTreePage() {
       {treeData.moneySaved > 0 && (
         <div className="bg-gradient-to-r from-green-600 via-emerald-500 to-teal-500 rounded-2xl p-6 mb-8 text-white shadow-lg relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-2 left-8 text-6xl">💰</div>
-            <div className="absolute bottom-2 right-12 text-5xl">🌱</div>
-            <div className="absolute top-4 right-40 text-4xl">⭐</div>
+            <DollarSign className="absolute top-4 left-10 w-14 h-14" />
+            <Sprout className="absolute bottom-4 right-14 w-12 h-12" />
+            <Star className="absolute top-6 right-44 w-10 h-10" />
           </div>
           <div className="relative text-center">
             <p className="text-sm opacity-90 mb-1">Estimated training cost savings</p>
@@ -313,7 +317,7 @@ export default function SkillTreePage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {treeData.families.map((family) => {
           const colors = FAMILY_COLORS[family.familyName] || FAMILY_COLORS["Climate Action"];
-          const icon = FAMILY_ICONS[family.familyName] || "🌿";
+          const icon = FAMILY_ICONS[family.familyName] || <Leaf className="w-6 h-6" />;
           const familyUnlocked = family.skills.filter((s) => s.unlocked).length;
           const familyNoGap = family.skills.filter((s) => s.severity === "No Gap").length;
 
@@ -321,7 +325,7 @@ export default function SkillTreePage() {
             <div key={family.familyId} className={`rounded-2xl border-2 ${colors.border} ${colors.bg} p-5`}>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl">{icon}</span>
+                  <span>{icon}</span>
                   <h3 className={`text-lg font-bold ${colors.accent}`}>{family.familyName}</h3>
                 </div>
                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${colors.badge}`}>
