@@ -1,0 +1,102 @@
+[
+  {
+    "id": "q-01",
+    "skillId": "sk-ca-01",
+    "prompt": "How would you rate your ability to calculate and analyze organizational carbon emissions across Scope 1, 2, and 3?"
+  },
+  {
+    "id": "q-02",
+    "skillId": "sk-ca-02",
+    "prompt": "How confident are you in identifying and assessing climate-related risks and opportunities for your organization?"
+  },
+  {
+    "id": "q-03",
+    "skillId": "sk-ca-03",
+    "prompt": "How proficient are you with GHG Protocol standards and preparing emissions disclosure reports?"
+  },
+  {
+    "id": "q-04",
+    "skillId": "sk-ca-05",
+    "prompt": "How well can you evaluate and plan renewable energy procurement strategies for an organization?"
+  },
+  {
+    "id": "q-05",
+    "skillId": "sk-ca-09",
+    "prompt": "How experienced are you in conducting energy efficiency audits and identifying improvement opportunities?"
+  },
+  {
+    "id": "q-06",
+    "skillId": "sk-ce-01",
+    "prompt": "How capable are you of applying circular design principles to product development?"
+  },
+  {
+    "id": "q-07",
+    "skillId": "sk-ce-02",
+    "prompt": "How well can you analyze waste streams and identify diversion and reduction opportunities?"
+  },
+  {
+    "id": "q-08",
+    "skillId": "sk-ce-07",
+    "prompt": "How proficient are you in conducting life cycle assessments for products or services?"
+  },
+  {
+    "id": "q-09",
+    "skillId": "sk-ce-06",
+    "prompt": "How experienced are you in evaluating and implementing sustainable packaging solutions?"
+  },
+  {
+    "id": "q-10",
+    "skillId": "sk-ce-09",
+    "prompt": "How well can you design or evaluate circular business models such as product-as-a-service or take-back programs?"
+  },
+  {
+    "id": "q-11",
+    "skillId": "sk-so-01",
+    "prompt": "How capable are you of integrating sustainability criteria into supply chain management decisions?"
+  },
+  {
+    "id": "q-12",
+    "skillId": "sk-so-02",
+    "prompt": "How proficient are you in water stewardship practices including usage tracking and conservation planning?"
+  },
+  {
+    "id": "q-13",
+    "skillId": "sk-so-04",
+    "prompt": "How experienced are you with environmental management systems such as ISO 14001?"
+  },
+  {
+    "id": "q-14",
+    "skillId": "sk-so-06",
+    "prompt": "How well can you assess organizational impacts on biodiversity and develop mitigation strategies?"
+  },
+  {
+    "id": "q-15",
+    "skillId": "sk-so-10",
+    "prompt": "How capable are you of auditing suppliers against sustainability criteria and standards?"
+  },
+  {
+    "id": "q-16",
+    "skillId": "sk-gi-02",
+    "prompt": "How proficient are you in preparing ESG sustainability reports aligned with frameworks like GRI or SASB?"
+  },
+  {
+    "id": "q-17",
+    "skillId": "sk-gi-03",
+    "prompt": "How well do you understand green finance instruments such as green bonds, sustainability-linked loans, and carbon credits?"
+  },
+  {
+    "id": "q-18",
+    "skillId": "sk-gi-05",
+    "prompt": "How experienced are you in engaging stakeholders on sustainability initiatives and communicating impact?"
+  },
+  {
+    "id": "q-19",
+    "skillId": "sk-gi-07",
+    "prompt": "How capable are you of using digital tools and data platforms to track and report sustainability metrics?"
+  },
+  {
+    "id": "q-20",
+    "skillId": "sk-gi-10",
+    "prompt": "How well do you understand EU Taxonomy and green classification systems for sustainable activities?"
+  }
+]

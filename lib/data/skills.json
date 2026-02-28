@@ -1,0 +1,338 @@
+[
+  {
+    "id": "sk-ca-01",
+    "name": "Carbon Footprint Analysis",
+    "familyId": "fam-ca",
+    "familyName": "Climate Action",
+    "functionTags": ["Sustainability Manager", "Operations Manager", "Environmental Analyst"]
+  },
+  {
+    "id": "sk-ca-02",
+    "name": "Climate Risk Assessment",
+    "familyId": "fam-ca",
+    "familyName": "Climate Action",
+    "functionTags": ["Sustainability Manager", "Risk Manager"]
+  },
+  {
+    "id": "sk-ca-03",
+    "name": "GHG Protocol & Reporting",
+    "familyId": "fam-ca",
+    "familyName": "Climate Action",
+    "functionTags": ["Sustainability Manager", "Environmental Analyst", "Compliance Manager"]
+  },
+  {
+    "id": "sk-ca-04",
+    "name": "Science-Based Targets",
+    "familyId": "fam-ca",
+    "familyName": "Climate Action",
+    "functionTags": ["Sustainability Manager", "Strategy Manager"]
+  },
+  {
+    "id": "sk-ca-05",
+    "name": "Renewable Energy Strategy",
+    "familyId": "fam-ca",
+    "familyName": "Climate Action",
+    "functionTags": ["Operations Manager", "Sustainability Manager", "Facilities Manager"]
+  },
+  {
+    "id": "sk-ca-06",
+    "name": "Carbon Offset & Credit Markets",
+    "familyId": "fam-ca",
+    "familyName": "Climate Action",
+    "functionTags": ["Sustainability Manager", "Finance Manager"]
+  },
+  {
+    "id": "sk-ca-07",
+    "name": "Climate Adaptation Planning",
+    "familyId": "fam-ca",
+    "familyName": "Climate Action",
+    "functionTags": ["Risk Manager", "Strategy Manager"]
+  },
+  {
+    "id": "sk-ca-08",
+    "name": "Net-Zero Pathway Design",
+    "familyId": "fam-ca",
+    "familyName": "Climate Action",
+    "functionTags": ["Sustainability Manager", "Strategy Manager"]
+  },
+  {
+    "id": "sk-ca-09",
+    "name": "Energy Efficiency Auditing",
+    "familyId": "fam-ca",
+    "familyName": "Climate Action",
+    "functionTags": ["Operations Manager", "Facilities Manager", "Environmental Analyst"]
+  },
+  {
+    "id": "sk-ca-10",
+    "name": "Climate Policy & Regulation",
+    "familyId": "fam-ca",
+    "familyName": "Climate Action",
+    "functionTags": ["Compliance Manager", "Sustainability Manager"]
+  },
+  {
+    "id": "sk-ca-11",
+    "name": "Scope 3 Emissions Management",
+    "familyId": "fam-ca",
+    "familyName": "Climate Action",
+    "functionTags": ["Sustainability Manager", "Supply Chain Manager", "Operations Manager"]
+  },
+  {
+    "id": "sk-ca-12",
+    "name": "Climate Data Analytics",
+    "familyId": "fam-ca",
+    "familyName": "Climate Action",
+    "functionTags": ["Environmental Analyst", "Data Manager"]
+  },
+  {
+    "id": "sk-ce-01",
+    "name": "Circular Product Design",
+    "familyId": "fam-ce",
+    "familyName": "Circular Economy",
+    "functionTags": ["Product Manager", "Innovation Manager"]
+  },
+  {
+    "id": "sk-ce-02",
+    "name": "Waste Stream Analysis",
+    "familyId": "fam-ce",
+    "familyName": "Circular Economy",
+    "functionTags": ["Operations Manager", "Facilities Manager", "Environmental Analyst"]
+  },
+  {
+    "id": "sk-ce-03",
+    "name": "Material Flow Accounting",
+    "familyId": "fam-ce",
+    "familyName": "Circular Economy",
+    "functionTags": ["Operations Manager", "Supply Chain Manager"]
+  },
+  {
+    "id": "sk-ce-04",
+    "name": "Extended Producer Responsibility",
+    "familyId": "fam-ce",
+    "familyName": "Circular Economy",
+    "functionTags": ["Compliance Manager", "Product Manager"]
+  },
+  {
+    "id": "sk-ce-05",
+    "name": "Recycling & Recovery Systems",
+    "familyId": "fam-ce",
+    "familyName": "Circular Economy",
+    "functionTags": ["Operations Manager", "Facilities Manager"]
+  },
+  {
+    "id": "sk-ce-06",
+    "name": "Sustainable Packaging",
+    "familyId": "fam-ce",
+    "familyName": "Circular Economy",
+    "functionTags": ["Product Manager", "Supply Chain Manager", "Marketing Manager"]
+  },
+  {
+    "id": "sk-ce-07",
+    "name": "Life Cycle Assessment",
+    "familyId": "fam-ce",
+    "familyName": "Circular Economy",
+    "functionTags": ["Environmental Analyst", "Product Manager", "Sustainability Manager"]
+  },
+  {
+    "id": "sk-ce-08",
+    "name": "Remanufacturing & Refurbishment",
+    "familyId": "fam-ce",
+    "familyName": "Circular Economy",
+    "functionTags": ["Operations Manager", "Product Manager"]
+  },
+  {
+    "id": "sk-ce-09",
+    "name": "Circular Business Models",
+    "familyId": "fam-ce",
+    "familyName": "Circular Economy",
+    "functionTags": ["Strategy Manager", "Innovation Manager", "Marketing Manager"]
+  },
+  {
+    "id": "sk-ce-10",
+    "name": "Industrial Symbiosis",
+    "familyId": "fam-ce",
+    "familyName": "Circular Economy",
+    "functionTags": ["Operations Manager", "Strategy Manager"]
+  },
+  {
+    "id": "sk-ce-11",
+    "name": "Zero-Waste Strategy",
+    "familyId": "fam-ce",
+    "familyName": "Circular Economy",
+    "functionTags": ["Sustainability Manager", "Facilities Manager", "Operations Manager"]
+  },
+  {
+    "id": "sk-ce-12",
+    "name": "Biomimicry & Bio-Based Materials",
+    "familyId": "fam-ce",
+    "familyName": "Circular Economy",
+    "functionTags": ["Innovation Manager", "Product Manager"]
+  },
+  {
+    "id": "sk-so-01",
+    "name": "Green Supply Chain Management",
+    "familyId": "fam-so",
+    "familyName": "Sustainable Operations",
+    "functionTags": ["Supply Chain Manager", "Operations Manager", "Procurement Manager"]
+  },
+  {
+    "id": "sk-so-02",
+    "name": "Water Stewardship",
+    "familyId": "fam-so",
+    "familyName": "Sustainable Operations",
+    "functionTags": ["Facilities Manager", "Operations Manager", "Environmental Analyst"]
+  },
+  {
+    "id": "sk-so-03",
+    "name": "Sustainable Procurement",
+    "familyId": "fam-so",
+    "familyName": "Sustainable Operations",
+    "functionTags": ["Procurement Manager", "Supply Chain Manager"]
+  },
+  {
+    "id": "sk-so-04",
+    "name": "Environmental Management Systems",
+    "familyId": "fam-so",
+    "familyName": "Sustainable Operations",
+    "functionTags": ["Compliance Manager", "Operations Manager", "Sustainability Manager"]
+  },
+  {
+    "id": "sk-so-05",
+    "name": "Pollution Prevention",
+    "familyId": "fam-so",
+    "familyName": "Sustainable Operations",
+    "functionTags": ["Environmental Analyst", "Operations Manager", "Facilities Manager"]
+  },
+  {
+    "id": "sk-so-06",
+    "name": "Biodiversity Impact Assessment",
+    "familyId": "fam-so",
+    "familyName": "Sustainable Operations",
+    "functionTags": ["Environmental Analyst", "Sustainability Manager"]
+  },
+  {
+    "id": "sk-so-07",
+    "name": "Green Building & Facilities",
+    "familyId": "fam-so",
+    "familyName": "Sustainable Operations",
+    "functionTags": ["Facilities Manager", "Operations Manager"]
+  },
+  {
+    "id": "sk-so-08",
+    "name": "Sustainable Logistics",
+    "familyId": "fam-so",
+    "familyName": "Sustainable Operations",
+    "functionTags": ["Supply Chain Manager", "Operations Manager"]
+  },
+  {
+    "id": "sk-so-09",
+    "name": "Occupational Health & Green Safety",
+    "familyId": "fam-so",
+    "familyName": "Sustainable Operations",
+    "functionTags": ["HR Manager", "Operations Manager", "Facilities Manager"]
+  },
+  {
+    "id": "sk-so-10",
+    "name": "Supplier Sustainability Auditing",
+    "familyId": "fam-so",
+    "familyName": "Sustainable Operations",
+    "functionTags": ["Procurement Manager", "Compliance Manager", "Supply Chain Manager"]
+  },
+  {
+    "id": "sk-so-11",
+    "name": "Resource Efficiency Optimization",
+    "familyId": "fam-so",
+    "familyName": "Sustainable Operations",
+    "functionTags": ["Operations Manager", "Facilities Manager", "Data Manager"]
+  },
+  {
+    "id": "sk-so-12",
+    "name": "Chemical Management & REACH",
+    "familyId": "fam-so",
+    "familyName": "Sustainable Operations",
+    "functionTags": ["Compliance Manager", "Operations Manager"]
+  },
+  {
+    "id": "sk-gi-01",
+    "name": "Green Technology Scouting",
+    "familyId": "fam-gi",
+    "familyName": "Green Innovation",
+    "functionTags": ["Innovation Manager", "Strategy Manager", "Technology Manager"]
+  },
+  {
+    "id": "sk-gi-02",
+    "name": "Sustainability Reporting (ESG)",
+    "familyId": "fam-gi",
+    "familyName": "Green Innovation",
+    "functionTags": ["Sustainability Manager", "Finance Manager", "Compliance Manager"]
+  },
+  {
+    "id": "sk-gi-03",
+    "name": "Green Finance & Investment",
+    "familyId": "fam-gi",
+    "familyName": "Green Innovation",
+    "functionTags": ["Finance Manager", "Strategy Manager"]
+  },
+  {
+    "id": "sk-gi-04",
+    "name": "Sustainable Innovation Frameworks",
+    "familyId": "fam-gi",
+    "familyName": "Green Innovation",
+    "functionTags": ["Innovation Manager", "Product Manager", "Strategy Manager"]
+  },
+  {
+    "id": "sk-gi-05",
+    "name": "Stakeholder Engagement for Sustainability",
+    "familyId": "fam-gi",
+    "familyName": "Green Innovation",
+    "functionTags": ["Marketing Manager", "Sustainability Manager", "HR Manager"]
+  },
+  {
+    "id": "sk-gi-06",
+    "name": "Green Marketing & Communications",
+    "familyId": "fam-gi",
+    "familyName": "Green Innovation",
+    "functionTags": ["Marketing Manager", "Sustainability Manager"]
+  },
+  {
+    "id": "sk-gi-07",
+    "name": "Sustainability Data & Digital Tools",
+    "familyId": "fam-gi",
+    "familyName": "Green Innovation",
+    "functionTags": ["Data Manager", "Technology Manager", "Environmental Analyst"]
+  },
+  {
+    "id": "sk-gi-08",
+    "name": "Clean Technology Development",
+    "familyId": "fam-gi",
+    "familyName": "Green Innovation",
+    "functionTags": ["Innovation Manager", "Technology Manager"]
+  },
+  {
+    "id": "sk-gi-09",
+    "name": "Social Impact & Just Transition",
+    "familyId": "fam-gi",
+    "familyName": "Green Innovation",
+    "functionTags": ["HR Manager", "Strategy Manager", "Sustainability Manager"]
+  },
+  {
+    "id": "sk-gi-10",
+    "name": "Taxonomy & Green Classification",
+    "familyId": "fam-gi",
+    "familyName": "Green Innovation",
+    "functionTags": ["Compliance Manager", "Finance Manager", "Sustainability Manager"]
+  },
+  {
+    "id": "sk-gi-11",
+    "name": "Eco-Design & Cradle-to-Cradle",
+    "familyId": "fam-gi",
+    "familyName": "Green Innovation",
+    "functionTags": ["Product Manager", "Innovation Manager"]
+  },
+  {
+    "id": "sk-gi-12",
+    "name": "Carbon Capture & Removal Technologies",
+    "familyId": "fam-gi",
+    "familyName": "Green Innovation",
+    "functionTags": ["Technology Manager", "Innovation Manager", "Sustainability Manager"]
+  }
+]

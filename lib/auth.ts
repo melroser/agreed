@@ -18,21 +18,26 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account }) {
       if (!user.email || !user.name) return false;
 
-      // Upsert user in DB on every sign-in
-      const existing = await db
-        .select()
-        .from(users)
-        .where(eq(users.email, user.email))
-        .limit(1);
+      try {
+        // Upsert user in DB on every sign-in
+        const existing = await db
+          .select()
+          .from(users)
+          .where(eq(users.email, user.email))
+          .limit(1);
 
-      if (existing.length === 0) {
-        const [created] = await db
-          .insert(users)
-          .values({ email: user.email, name: user.name })
-          .returning();
-        user.id = created.id;
-      } else {
-        user.id = existing[0].id;
+        if (existing.length === 0) {
+          const [created] = await db
+            .insert(users)
+            .values({ email: user.email, name: user.name })
+            .returning();
+          user.id = created.id;
+        } else {
+          user.id = existing[0].id;
+        }
+      } catch (error) {
+        console.error("DB error during sign-in (continuing anyway):", error);
+        // Don't block sign-in if DB is down — let them in with JWT
       }
 
       return true;
@@ -46,15 +51,19 @@ export const authOptions: NextAuthOptions = {
       // Refresh companyId/role from DB on every token refresh
       // This ensures the token stays in sync after onboarding
       if (token.userId) {
-        const dbUser = await db
-          .select({ companyId: users.companyId, role: users.role })
-          .from(users)
-          .where(eq(users.id, token.userId as string))
-          .limit(1);
+        try {
+          const dbUser = await db
+            .select({ companyId: users.companyId, role: users.role })
+            .from(users)
+            .where(eq(users.id, token.userId as string))
+            .limit(1);
 
-        if (dbUser.length > 0) {
-          token.companyId = dbUser[0].companyId;
-          token.role = dbUser[0].role;
+          if (dbUser.length > 0) {
+            token.companyId = dbUser[0].companyId;
+            token.role = dbUser[0].role;
+          }
+        } catch (error) {
+          console.error("DB error during JWT refresh (using cached token):", error);
         }
       }
 

@@ -35,7 +35,7 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
     - Show user name after login to verify session works
     - _Requirements: 1.1, 1.2, 1.3_
 
-- [-] 3. Company Onboarding (Minimal)
+- [x] 3. Company Onboarding (Minimal)
   - Create onboarding form at `app/onboarding/page.tsx`
   - Collect only: company name, industry (dropdown: Tech, Manufacturing, Retail, Healthcare, Other)
   - Create API route `app/api/company/route.ts` (POST)
@@ -43,34 +43,34 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
   - Redirect to `/dashboard`
   - _Requirements: 6.1, 6.2, 6.3_
 
-- [ ] 4. Hardcode Seed Data (NO DATABASE SEEDING)
-  - [ ] 4.1 Create JSON files with skills and questions
+- [x] 4. Hardcode Seed Data (NO DATABASE SEEDING)
+  - [x] 4.1 Create JSON files with skills and questions
     - Create `lib/data/skills.json`: 40-60 skills across 4 families (Climate Action, Circular Economy, Sustainable Operations, Green Innovation)
     - Each skill: `{ id, name, familyId, familyName, functionTags: [] }`
     - Create `lib/data/questions.json`: 20 questions with `{ id, skillId, prompt }`
     - Create `lib/data/role-defaults.json`: function → skills mappings with required levels
     - _Requirements: 17.1, 17.2, 17.3, 17.4_
 
-  - [ ] 4.2 Create utility to load seed data
+  - [x] 4.2 Create utility to load seed data
     - Create `lib/seed-data.ts` with `getSkills()`, `getQuestions()`, `getRoleDefaults()`
     - Export these functions for use throughout app
     - _Requirements: 17.5_
 
-- [ ] 5. Admin View: Department and Role Management
-  - [ ] 5.1 Create navigation with Admin/Employee toggle
+- [x] 5. Admin View: Department and Role Management
+  - [x] 5.1 Create navigation with Admin/Employee toggle
     - Build `components/ViewToggle.tsx` with switch between Admin and Employee views
     - Store view preference in local state (no backend needed)
     - Add to main layout
     - _Requirements: (hackathon UX)_
 
-  - [ ] 5.2 Create departments page (Admin view)
+  - [x] 5.2 Create departments page (Admin view)
     - Build `app/dashboard/admin/departments/page.tsx`
     - Simple form: department name
     - API route `app/api/departments/route.ts` (POST, GET)
     - List all departments
     - _Requirements: 6.3.1_
 
-  - [ ] 5.3 Create roles page with auto-assignment (Admin view)
+  - [x] 5.3 Create roles page with auto-assignment (Admin view)
     - Build `app/dashboard/admin/roles/page.tsx`
     - Form: select department, enter function (dropdown: Sustainability Manager, Operations Manager, Marketing Manager, etc.), enter title
     - API route `app/api/roles/route.ts` (POST, GET)
@@ -78,7 +78,7 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
     - Display roles with skill count (calculated from role-defaults.json on the fly)
     - _Requirements: 9.1, 9.2, 9.3_
 
-- [ ] 6. Admin View: Employee Management
+- [x] 6. Admin View: Employee Management
   - Build `app/dashboard/admin/employees/page.tsx`
   - Form: name, select department, select role
   - API route `app/api/employees/route.ts` (POST, GET, DELETE)
@@ -86,8 +86,8 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
   - Add delete button (soft delete: set isActive = false)
   - _Requirements: 10.1, 10.2, 10.3, 10.5_
 
-- [ ] 7. Employee View: Assessment Flow (THE MONEY MAKER)
-  - [ ] 7.1 Create assessment page
+- [x] 7. Employee View: Assessment Flow (THE MONEY MAKER)
+  - [x] 7.1 Create assessment page
     - Build `app/dashboard/employee/assessment/page.tsx`
     - Show employee selector (for demo, admin can assess any employee)
     - API route `app/api/assessment/questions/route.ts`: return 20 questions from `questions.json`, prioritize skills from employee's role
@@ -95,7 +95,7 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
     - Make it visually engaging with progress bar
     - _Requirements: 11.1, 11.2_
 
-  - [ ] 7.2 Submit assessment and calculate XP
+  - [x] 7.2 Submit assessment and calculate XP
     - API route `app/api/assessment/submit/route.ts`
     - Save EmployeeSkillAssessment records (employeeId, skillId, currentLevel, assessmentDate, conductedBy)
     - Calculate XP: compare to previous assessment, award points for improvements
@@ -103,8 +103,8 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
     - Show success message with XP earned
     - _Requirements: 11.4, 11.5, 11.6, 16.1_
 
-- [ ] 8. Admin View: Gap Calculation and Dashboard
-  - [ ] 8.1 Implement gap calculator
+- [x] 8. Admin View: Gap Calculation and Dashboard
+  - [x] 8.1 Implement gap calculator
     - Create `lib/gap-calculator.ts`
     - `calculateEmployeeGaps(employeeId)`: get employee's role.function, look up skills in role-defaults.json, get latest assessments, compute gap = required - current
     - `classifySeverity(gap)`: Critical if >= 2, Moderate if == 1, No Gap if <= 0
@@ -112,7 +112,7 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
     - **NO DATABASE JOINS - Just read role-defaults.json in memory**
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5_
 
-  - [ ] 8.2 Create dashboard with ALL rubric requirements
+  - [x] 8.2 Create dashboard with ALL rubric requirements
     - Build `app/dashboard/admin/page.tsx`
     - API route `app/api/dashboard/route.ts`: calculate all dashboard data
     - **KPI Cards**: total employees, total gaps, critical count, moderate count
@@ -121,7 +121,7 @@ Technical shortcuts: JWT sessions, Next.js API routes (auto-converted by Netlify
     - **High Risk Roles Table**: Simple HTML table listing top 3 roles with most Critical gaps
     - _Requirements: 13.1, 13.2, 13.3, 13.4_
 
-- [ ] 9. Admin View: CSV Export (REQUIRED FOR RUBRIC)
+- [x] 9. Admin View: CSV Export (REQUIRED FOR RUBRIC)
   - Create API route `app/api/export/gaps/route.ts`
   - Generate CSV: employee, department, role, skill, required level, current level, severity
   - Return as downloadable file
