@@ -1,8 +1,5 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { db } from "@/lib/db";
-import { users } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -15,58 +12,20 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ user }) {
       if (!user.email || !user.name) return false;
-
-      try {
-        // Upsert user in DB on every sign-in
-        const existing = await db
-          .select()
-          .from(users)
-          .where(eq(users.email, user.email))
-          .limit(1);
-
-        if (existing.length === 0) {
-          const [created] = await db
-            .insert(users)
-            .values({ email: user.email, name: user.name })
-            .returning();
-          user.id = created.id;
-        } else {
-          user.id = existing[0].id;
-        }
-      } catch (error) {
-        console.error("DB error during sign-in (continuing anyway):", error);
-        // Don't block sign-in if DB is down — let them in with JWT
-      }
-
-      return true;
+      return true; // Just let them in! No DB needed for login.
     },
-    async jwt({ token, user, trigger }) {
-      // On initial sign-in, set userId from the DB record
+    async jwt({ token, user }) {
+      // On initial sign-in, grab the Google ID
       if (user) {
         token.userId = user.id;
+        
+        // HACKATHON SHORTCUT: Hardcode these for now so you can build the UI!
+        // We will fix the DB connection later.
+        token.companyId = "demo-company-123"; 
+        token.role = "Owner";
       }
-
-      // Refresh companyId/role from DB on every token refresh
-      // This ensures the token stays in sync after onboarding
-      if (token.userId) {
-        try {
-          const dbUser = await db
-            .select({ companyId: users.companyId, role: users.role })
-            .from(users)
-            .where(eq(users.id, token.userId as string))
-            .limit(1);
-
-          if (dbUser.length > 0) {
-            token.companyId = dbUser[0].companyId;
-            token.role = dbUser[0].role;
-          }
-        } catch (error) {
-          console.error("DB error during JWT refresh (using cached token):", error);
-        }
-      }
-
       return token;
     },
     async session({ session, token }) {
@@ -78,8 +37,6 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  pages: {
-    signIn: "/",
-    error: "/",
-  },
+  // I removed your custom error page temporarily. 
+  // If it crashes now, NextAuth will show us exactly why instead of silently bouncing you!
 };
