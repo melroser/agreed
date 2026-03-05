@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>aGreend Exec Dashboard</title>
+    <style>
+      :root{
+        --bg:#fafffe;
+        --panel:#ffffff;
+        --muted:#6b7280;
+        --text:#111827;
+        --accent:#16a34a;
+        --good:#22c55e;
+        --warn:#f59e0b;
+        --bad:#ef4444;
+        --card:#ffffff;
+        --border:#e5e7eb;
+      }
+      html,body{height:100%; margin:0; background:var(--bg); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;}
+      .wrap{max-width:1180px; margin:0 auto; padding:40px 16px; box-sizing:border-box;}
+      .top{display:flex; justify-content:space-between; align-items:flex-end; gap:12px; flex-wrap:wrap;}
+      h1{margin:0; font-size:24px; font-weight:700;}
+      .sub{margin-top:6px; color:var(--muted); font-size:14px; line-height:1.5;}
+      .chips{display:flex; gap:8px; flex-wrap:wrap;}
+      .chip{background:#f9fafb; border:1px solid var(--border); border-radius:999px; padding:8px 14px; font-size:13px; color:var(--muted); font-weight:500;}
+      .chip strong{color:var(--text); font-weight:600; margin-right:4px;}
+      .grid{display:grid; grid-template-columns: repeat(12, 1fr); gap:16px; margin-top:24px;}
+      .card{background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);}
+      .kpi{background:var(--card); height: 100%;}
+      .k{color:var(--muted); font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;}
+      .v{font-size:32px; font-weight:700; margin-top:8px; color:var(--text);}
+      .bar{height:8px; background:#f3f4f6; border-radius:999px; overflow:hidden; margin-top:16px;}
+      .bar > div{height:100%; width:40%; background:var(--accent); border-radius:999px;}
+      table{width:100%; border-collapse:collapse; font-size:13px;}
+      th,td{border-bottom:1px solid var(--border); padding:12px 8px; text-align:left;}
+      th{color:var(--muted); font-weight:600; font-size:12px; text-transform:uppercase;}
+      .pill{font-size:12px; padding:6px 12px; border-radius:999px; border:1px solid var(--border); font-weight:600; display:inline-block;}
+      .pill.good{background:#f0fdf4; border-color:#bbf7d0; color:#15803d;}
+      .pill.warn{background:#fffbeb; border-color:#fde68a; color:#b45309;}
+      .pill.bad{background:#fef2f2; border-color:#fecaca; color:#b91c1c;}
+      .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;}
+      button{background:#ffffff; border:1px solid var(--border); color:var(--text); border-radius:8px; padding:10px 16px; cursor:pointer; font-size:13px; font-weight:600; transition:all 0.15s; box-shadow:0 1px 2px rgba(0,0,0,0.05);}
+      button:hover{background:#f9fafb; transform:translateY(-1px);}
+      button.primary{background:var(--accent); border-color:var(--accent); color:white;}
+      button.primary:hover{background:#15803d; border-color:#15803d;}
+      .note{color:var(--muted); font-size:13px; line-height:1.5;}
+      .mono{font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px; background:#f9fafb; padding:12px; border-radius:8px; border:1px solid var(--border);}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="top">
+        <div>
+          <h1>Green Skills Gap Intelligence</h1>
+          <div class="sub">
+            V2 intention: an exec view that ties skill readiness to cost, risk, and progress across departments and roles.
+          </div>
+        </div>
+        <div class="chips">
+          <div class="chip"><strong>Company</strong> DemoCo</div>
+          <div class="chip"><strong>Quarter</strong> Q2</div>
+          <div class="chip"><strong>Target</strong> Climate readiness baseline</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card" style="grid-column: span 4;">
+          <div class="kpi">
+            <div class="k">Readiness score</div>
+            <div class="v" id="score" style="color:var(--accent)">62</div>
+            <div class="bar"><div id="scoreBar"></div></div>
+            <div class="sub" style="margin-top:16px;">
+              Composite of role coverage, critical gaps, and assessment completion.
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: span 4;">
+          <div class="kpi">
+            <div class="k">Money saved to date</div>
+            <div class="v" id="saved" style="color:#059669">$48,200</div>
+            <div class="sub" style="margin-top:24px;">
+              Estimated reduction in rework, audit hours, and procurement waste based on completed skills.
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: span 4;">
+          <div class="kpi">
+            <div class="k">Critical gaps open</div>
+            <div class="v" id="critical" style="color:var(--bad)">7</div>
+            <div class="sub" style="margin-top:24px;">
+              These block compliance and cause high risk exposure. Recommended focus list below.
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: span 7;">
+          <div class="k" style="margin-bottom:12px;">Departments</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Department</th>
+                <th>Readiness</th>
+                <th>Assessments</th>
+                <th>Critical gaps</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="deptBody"></tbody>
+          </table>
+          <div class="actions">
+            <button class="primary" id="simulateBtn">Simulate 1 Week Progress</button>
+            <button id="resetBtn">Reset</button>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: span 5;">
+          <div class="k" style="margin-bottom:12px;">Recommended focus</div>
+          <div class="note mb-4">
+            Top skill gaps by risk weight and number of employees blocked behind them.
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Skill</th>
+                <th>Blocked</th>
+                <th>Risk</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="focusBody"></tbody>
+          </table>
+          <div style="height:16px"></div>
+          <div class="note font-medium text-gray-900" style="padding:12px; background:#f0fdf4; border-radius:8px; border:1px solid #bbf7d0;">
+            💡 <strong>Pitch line:</strong> "We tie learning directly to dollars saved and risk reduced, so leadership can fund the right training first."
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: span 12;">
+          <div class="k" style="margin-bottom:12px;">Export preview</div>
+          <div class="mono" id="exportLine"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ... (KEEP ALL THE ORIGINAL JAVASCRIPT FROM YOUR FILE HERE - IT IS PERFECT) ...
+      const base = { score:62, saved:48200, critical:7, depts:[ {name:"Operations", readiness:58, assessments:71, critical:3}, {name:"Procurement", readiness:49, assessments:62, critical:2}, {name:"Facilities", readiness:66, assessments:78, critical:1}, {name:"Finance", readiness:74, assessments:83, critical:1} ], focus:[ {skill:"Supplier mapping", blocked:18, risk:9}, {skill:"Scope 3 accounting", blocked:12, risk:10}, {skill:"Data quality checks", blocked:15, risk:8}, {skill:"Audit evidence capture", blocked:9, risk:7} ] };
+      let s = JSON.parse(JSON.stringify(base));
+      const el = (id) => document.getElementById(id);
+      function pillFor(readiness, critical){ if(critical >= 3) return '<span class="pill bad">At risk</span>'; if(readiness < 60) return '<span class="pill warn">Needs focus</span>'; return '<span class="pill good">On track</span>'; }
+      function money(n){ return "$" + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+      function render(){ el("score").textContent = s.score; el("saved").textContent = money(s.saved); el("critical").textContent = s.critical; el("scoreBar").style.width = Math.max(6, Math.min(100, s.score)) + "%"; const deptBody = el("deptBody"); deptBody.innerHTML = ""; for(const d of s.depts){ const tr = document.createElement("tr"); tr.innerHTML = ` <td><strong class="text-gray-900">${d.name}</strong></td> <td>${d.readiness}</td> <td>${d.assessments}%</td> <td class="font-bold ${d.critical > 0 ? 'text-red-600' : 'text-gray-400'}">${d.critical}</td> <td>${pillFor(d.readiness, d.critical)}</td> `; deptBody.appendChild(tr); } const focusBody = el("focusBody"); focusBody.innerHTML = ""; for(const f of s.focus){ const tr = document.createElement("tr"); tr.innerHTML = ` <td><strong class="text-gray-900">${f.skill}</strong></td> <td>${f.blocked}</td> <td><span class="text-amber-600 font-bold">${f.risk}/10</span></td> <td><span class="pill warn" style="cursor:pointer">Assign training</span></td> `; focusBody.appendChild(tr); } el("exportLine").textContent = 'GET /api/export.csv?company=DemoCo&quarter=Q2&include=roles,employees,gaps,skills -> 200 OK (download starts)'; }
+      function simulate(){ s.score = Math.min(92, s.score + 5); s.saved += 4200; s.critical = Math.max(0, s.critical - 1); for(const d of s.depts){ d.readiness = Math.min(95, d.readiness + Math.floor(Math.random() * 6)); d.assessments = Math.min(100, d.assessments + Math.floor(Math.random() * 5)); if(d.critical > 0 && Math.random() > 0.55) d.critical -= 1; } for(const f of s.focus){ f.blocked = Math.max(0, f.blocked - Math.floor(Math.random() * 4)); } render(); }
+      function reset(){ s = JSON.parse(JSON.stringify(base)); render(); }
+      el("simulateBtn").addEventListener("click", simulate); el("resetBtn").addEventListener("click", reset);
+      render();
+    </script>
+  </body>
+</html>

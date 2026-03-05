@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>aGreend Competitive Intelligence</title>
+    <style>
+      :root{
+        --bg: #fafffe;
+        --panel: #ffffff;
+        --muted: #6b7280;
+        --text: #111827;
+        --accent: #16a34a;
+        --good: #22c55e;
+        --border: #e5e7eb;
+        --highlight: #f0fdf4;
+      }
+      html,body{height:100%; margin:0; background:var(--bg); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;}
+      .wrap{max-width:900px; margin:0 auto; padding:40px 16px; box-sizing:border-box;}
+      
+      .header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; }
+      h1 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+      .sub { color: var(--muted); font-size: 14px; margin-top: 6px; }
+      
+      .tabs { display: flex; gap: 8px; border-bottom: 2px solid var(--border); margin-bottom: 24px; }
+      .tab { padding: 12px 24px; font-size: 15px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+      .tab:hover { color: var(--text); }
+      .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+      .board { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden; }
+      
+      .row { display: flex; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--border); transition: all 0.3s ease; }
+      .row:last-child { border-bottom: none; }
+      .row.is-user { background: var(--highlight); position: relative; }
+      .row.is-user::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); }
+      
+      .rank { font-size: 20px; font-weight: 800; color: var(--muted); width: 40px; text-align: center; }
+      .medal { font-size: 24px; width: 40px; text-align: center; }
+      
+      .info { flex: 1; margin-left: 16px; }
+      .name { font-size: 16px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+      .name .badge { font-size: 11px; padding: 2px 8px; background: #dcfce7; color: #15803d; border-radius: 999px; font-weight: 600; text-transform: uppercase; }
+      .detail { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+      .score-wrap { text-align: right; min-width: 150px; }
+      .score { font-size: 20px; font-weight: 800; color: var(--text); }
+      .score span { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; }
+      
+      .bar-container { width: 100px; height: 6px; background: #f3f4f6; border-radius: 999px; margin-top: 8px; margin-left: auto; overflow: hidden; }
+      .bar-fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+      .action-bar { margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; }
+      button { background: white; border: 1px solid var(--border); padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+      button:hover { background: #f9fafb; transform: translateY(-1px); }
+      button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+      button.primary:hover { background: #15803d; }
+
+      /* Animation for rank changing */
+      @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.02); background: #dcfce7; } 100% { transform: scale(1); } }
+      .anim-pop { animation: pop 0.6s ease-out; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="header">
+        <div>
+          <h1>Leaderboards</h1>
+          <div class="sub">Gamified climate intelligence. View rankings by industry, department, or squad.</div>
+        </div>
+      </div>
+
+      <div class="tabs" id="tabs">
+        <div class="tab" onclick="setTab('company')">🌍 Global (Industry Peers)</div>
+        <div class="tab" onclick="setTab('dept')">🏢 Internal (Rival Departments)</div>
+        <div class="tab active" onclick="setTab('squad')">👥 Your Squad (Employees)</div>
+      </div>
+
+      <div class="board" id="board">
+        <!-- Rows injected via JS -->
+      </div>
+
+      <div class="action-bar">
+        <button onclick="resetData()">Reset Demo</button>
+        <button class="primary" onclick="simulateXP()">🚀 Log Assessment (+2,500 XP)</button>
+      </div>
+    </div>
+
+    <script>
+      let currentTab = 'squad';
+
+      // The Data State
+      let data = {
+        company: [
+          { id: 1, name: "EcoLogistics Global", detail: "Transportation", score: 945000, max: 1000000 },
+          { id: 2, name: "DemoCo (You)", detail: "Hospitality", score: 812000, max: 1000000, isUser: true },
+          { id: 3, name: "GreenSupply Inc.", detail: "Manufacturing", score: 790000, max: 1000000 },
+          { id: 4, name: "Competitor Corp", detail: "Hospitality", score: 620000, max: 1000000 },
+        ],
+        dept: [
+          { id: 1, name: "Finance", detail: "84% Readiness · 12 Employees", score: 142000, max: 150000 },
+          { id: 2, name: "Operations (Your Dept)", detail: "76% Readiness · 24 Employees", score: 128000, max: 150000, isUser: true },
+          { id: 3, name: "Facilities", detail: "71% Readiness · 18 Employees", score: 115000, max: 150000 },
+          { id: 4, name: "Procurement", detail: "62% Readiness · 10 Employees", score: 89000, max: 150000 },
+        ],
+        squad: [
+          { id: 1, name: "Sarah Jenkins", detail: "Senior Ops Manager · Lvl 14", score: 18500, max: 20000 },
+          { id: 2, name: "Kilroy (You)", detail: "Operations Analyst · Lvl 11", score: 16200, max: 20000, isUser: true },
+          { id: 3, name: "David Chen", detail: "Logistics Coordinator · Lvl 9", score: 12400, max: 20000 },
+          { id: 4, name: "Maya Patel", detail: "Supply Chain Analyst · Lvl 6", score: 8100, max: 20000 },
+        ]
+      };
+
+      // Keep a clean copy for reset
+      const baseData = JSON.parse(JSON.stringify(data));
+
+      function formatNumber(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+      function getRankDisplay(index) {
+        if (index === 0) return '<div class="medal">🥇</div>';
+        if (index === 1) return '<div class="medal">🥈</div>';
+        if (index === 2) return '<div class="medal">🥉</div>';
+        return `<div class="rank">${index + 1}</div>`;
+      }
+
+      function render() {
+        // Sort current array by score descending
+        data[currentTab].sort((a, b) => b.score - a.score);
+
+        const board = document.getElementById('board');
+        board.innerHTML = '';
+
+        data[currentTab].forEach((item, index) => {
+          const row = document.createElement('div');
+          row.className = `row ${item.isUser ? 'is-user' : ''}`;
+          row.id = `row-${item.id}`;
+
+          const pct = Math.min(100, (item.score / item.max) * 100);
+
+          row.innerHTML = `
+            ${getRankDisplay(index)}
+            <div class="info">
+              <div class="name">
+                ${item.name} 
+                ${item.isUser ? '<span class="badge">YOU</span>' : ''}
+              </div>
+              <div class="detail">${item.detail}</div>
+            </div>
+            <div class="score-wrap">
+              <div class="score">${formatNumber(item.score)} <span>XP</span></div>
+              <div class="bar-container"><div class="bar-fill" style="width: ${pct}%"></div></div>
+            </div>
+          `;
+          board.appendChild(row);
+        });
+      }
+
+      function setTab(tabName) {
+        currentTab = tabName;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        render();
+      }
+
+      function simulateXP() {
+        // Find the user's item in the current tab
+        const userItem = data[currentTab].find(i => i.isUser);
+        if (userItem) {
+          // Add enough XP to overtake the person above them
+          userItem.score += 2500; 
+          render();
+          
+          // Trigger CSS animation on the user's row
+          setTimeout(() => {
+            const el = document.getElementById(`row-${userItem.id}`);
+            if(el) {
+              el.classList.add('anim-pop');
+              setTimeout(() => el.classList.remove('anim-pop'), 600);
+            }
+          }, 50);
+        }
+      }
+
+      function resetData() {
+        data = JSON.parse(JSON.stringify(baseData));
+        render();
+      }
+
+      // Initial render
+      render();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>aGreend Onboarding Wizard</title>
+    <style>
+      :root{
+        --bg: #fafffe;
+        --panel: #ffffff;
+        --muted: #6b7280;
+        --text: #111827;
+        --accent: #16a34a;
+        --good: #22c55e;
+        --border: #e5e7eb;
+        --card: #ffffff;
+      }
+      html,body{height:100%; margin:0; background:var(--bg); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;}
+      .wrap{max-width:980px; margin:0 auto; padding:40px 16px; box-sizing:border-box;}
+      .card{background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:30px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);}
+      h1{margin:0; font-size:24px; font-weight:700;}
+      .sub{margin-top:8px; color:var(--muted); font-size:14px; line-height:1.5;}
+      .steps{display:flex; gap:8px; flex-wrap:wrap; margin-top:20px;}
+      .step{padding:8px 14px; border-radius:999px; border:1px solid var(--border); color:var(--muted); font-size:13px; font-weight:500;}
+      .step.active{border-color:#bbf7d0; color:#15803d; background:#f0fdf4;}
+      .grid{display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:24px;}
+      .panel{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);}
+      label{display:block; font-size:13px; font-weight:600; color:var(--text); margin-top:16px;}
+      label:first-child{margin-top:0;}
+      input,select,textarea{
+        width:100%; box-sizing:border-box; margin-top:6px; padding:10px 12px;
+        background:#ffffff; border:1px solid var(--border); border-radius:8px; color:var(--text);
+        font-size:14px; transition: border-color 0.15s; outline: none;
+      }
+      input:focus, select:focus, textarea:focus { border-color: var(--accent); ring: 2px; }
+      textarea{min-height:100px; resize:vertical;}
+      .row{display:flex; gap:12px;}
+      .row > div{flex:1;}
+      .btns{display:flex; justify-content:space-between; gap:10px; margin-top:24px; flex-wrap:wrap; padding-top:20px; border-top:1px solid var(--border);}
+      button{background:#ffffff; border:1px solid var(--border); color:var(--text); border-radius:8px; padding:10px 20px; cursor:pointer; font-size:14px; font-weight:600; transition:all 0.15s;}
+      button:hover{background:#f9fafb; transform:translateY(-1px); box-shadow:0 2px 4px rgba(0,0,0,0.05);}
+      button.primary{background:var(--accent); border-color:var(--accent); color:white;}
+      button.primary:hover{background:#15803d; border-color:#15803d;}
+      button.good{background:var(--good); border-color:var(--good); color:white;}
+      .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size:13px;}
+      .preview{color:var(--text); font-size:13px; line-height:1.5;}
+      .pill{font-size:12px; padding:6px 12px; border-radius:999px; border:1px solid var(--border); color:var(--text); display:inline-block; font-weight:600; background:#f3f4f6;}
+      .pill.good{background:#f0fdf4; border-color:#bbf7d0; color:#16a34a;}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <h1>Onboarding Flow V2 Mockup</h1>
+        <div class="sub">
+          This shows the intended end to end flow the judge can click through in under 2 minutes.
+          It is a UI only mock, not connected to your backend.
+        </div>
+
+        <div class="steps" id="steps"></div>
+
+        <div class="grid">
+          <div class="panel" id="left"></div>
+          <div class="panel bg-gray-50">
+            <div class="pill good">Live preview</div>
+            <div style="height:16px"></div>
+            <div class="preview" id="preview"></div>
+            <div style="height:20px"></div>
+            <div class="preview mono text-gray-500" style="color:#6b7280; font-size:12px;" id="api"></div>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button id="backBtn">Back</button>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button id="skipBtn">Skip to end</button>
+            <button class="primary" id="nextBtn">Next</button>
+            <button class="good" id="finishBtn" style="display:none;">Finish</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ... (KEEP ALL THE ORIGINAL JAVASCRIPT FROM YOUR FILE HERE - IT IS PERFECT) ...
+      const flow = [{ key:"company", name:"Company" },{ key:"roles", name:"Roles" },{ key:"employees", name:"Employees" },{ key:"assessment", name:"Assessment" },{ key:"results", name:"Results" }];
+      const state = { step:0, company:{ name:"DemoCo", industry:"Hospitality", size:"250 to 500", notes:"" }, roles:[{ name:"Procurement Analyst", dept:"Operations", autoSkills:true },{ name:"Facilities Manager", dept:"Facilities", autoSkills:true }], employees:[{ name:"Avery", email:"avery@democo.com", role:"Procurement Analyst" },{ name:"Jordan", email:"jordan@democo.com", role:"Facilities Manager" }], assessment:{ role:"Procurement Analyst", answers:{ q1:3, q2:2, q3:4 } } };
+      const el = (id) => document.getElementById(id);
+      function renderSteps(){ const steps = el("steps"); steps.innerHTML = ""; flow.forEach((s, i) => { const div = document.createElement("div"); div.className = "step" + (i === state.step ? " active" : ""); div.textContent = (i+1) + ". " + s.name; steps.appendChild(div); }); }
+      function renderCompany(){ el("left").innerHTML = ` <div class="pill">Step 1</div> <div style="height:16px"></div> <div class="mono font-bold mb-4">Company profile</div> <label>Company name</label> <input id="c_name" value="${state.company.name}"> <label>Industry</label> <select id="c_ind"> ${["Hospitality","Manufacturing","Retail","Logistics","Finance"].map(x => `<option ${x===state.company.industry?"selected":""}>${x}</option>`).join("")} </select> <label>Company size</label> <select id="c_size"> ${["1 to 50","51 to 250","250 to 500","500 to 1000","1000+"].map(x => `<option ${x===state.company.size?"selected":""}>${x}</option>`).join("")} </select> <label>Notes</label> <textarea id="c_notes" placeholder="Optional context">${state.company.notes}</textarea> `; ["c_name","c_ind","c_size","c_notes"].forEach(id => { el(id).addEventListener("input", () => { state.company.name = el("c_name").value; state.company.industry = el("c_ind").value; state.company.size = el("c_size").value; state.company.notes = el("c_notes").value; renderPreview(); }); }); }
+      function renderRoles(){ const rows = state.roles.map((r, idx) => ` <div class="panel" style="margin-top:10px; background:#f9fafb;"> <div class="row"> <div> <label>Role name</label> <input data-idx="${idx}" data-k="name" value="${r.name}"> </div> <div> <label>Department</label> <input data-idx="${idx}" data-k="dept" value="${r.dept}"> </div> </div> <label>Auto assign skills</label> <select data-idx="${idx}" data-k="autoSkills"> <option value="true" ${r.autoSkills?"selected":""}>Yes</option> <option value="false" ${!r.autoSkills?"selected":""}>No</option> </select> </div> `).join(""); el("left").innerHTML = ` <div class="pill">Step 2</div> <div style="height:16px"></div> <div class="mono font-bold">Roles and skill templates</div> <div class="sub mb-4">In production this would pull templates and auto assign required skills per role.</div> ${rows} <div style="height:16px"></div> <button class="primary" id="addRole">Add role</button> `; el("addRole").addEventListener("click", () => { state.roles.push({ name:"New Role", dept:"Operations", autoSkills:true }); render(); }); el("left").querySelectorAll("input,select").forEach(inp => { inp.addEventListener("input", () => { const idx = Number(inp.dataset.idx); const k = inp.dataset.k; if(k === "autoSkills") state.roles[idx][k] = (inp.value === "true"); else state.roles[idx][k] = inp.value; renderPreview(); }); }); }
+      function renderEmployees(){ const roles = state.roles.map(r => r.name); const rows = state.employees.map((e, idx) => ` <div class="panel" style="margin-top:10px; background:#f9fafb;"> <div class="row"> <div> <label>Name</label> <input data-idx="${idx}" data-k="name" value="${e.name}"> </div> <div> <label>Email</label> <input data-idx="${idx}" data-k="email" value="${e.email}"> </div> </div> <label>Role</label> <select data-idx="${idx}" data-k="role"> ${roles.map(r => `<option ${r===e.role?"selected":""}>${r}</option>`).join("")} </select> </div> `).join(""); el("left").innerHTML = ` <div class="pill">Step 3</div> <div style="height:16px"></div> <div class="mono font-bold">Employees</div> <div class="sub mb-4">In production this can be CSV import plus role assignment.</div> ${rows} <div style="height:16px"></div> <button class="primary" id="addEmp">Add employee</button> `; el("addEmp").addEventListener("click", () => { state.employees.push({ name:"New Employee", email:"new@democo.com", role:roles[0] || "Unassigned" }); render(); }); el("left").querySelectorAll("input,select").forEach(inp => { inp.addEventListener("input", () => { const idx = Number(inp.dataset.idx); const k = inp.dataset.k; state.employees[idx][k] = inp.value; renderPreview(); }); }); }
+      function renderAssessment(){ const roleNames = state.roles.map(r => r.name); el("left").innerHTML = ` <div class="pill">Step 4</div> <div style="height:16px"></div> <div class="mono font-bold">Assessment</div> <div class="sub mb-4">This is the demo flow judges can click. In production you would expand questions per skill family.</div> <label>Role being assessed</label> <select id="a_role"> ${roleNames.map(r => `<option ${r===state.assessment.role?"selected":""}>${r}</option>`).join("")} </select> <label>Q1: Can you identify emissions sources in your workflow</label> <input id="q1" type="range" min="1" max="5" value="${state.assessment.answers.q1}"> <label>Q2: Can you validate supplier data quality</label> <input id="q2" type="range" min="1" max="5" value="${state.assessment.answers.q2}"> <label>Q3: Can you explain Scope 3 to a stakeholder</label> <input id="q3" type="range" min="1" max="5" value="${state.assessment.answers.q3}"> `; ["a_role","q1","q2","q3"].forEach(id => { el(id).addEventListener("input", () => { state.assessment.role = el("a_role").value; state.assessment.answers.q1 = Number(el("q1").value); state.assessment.answers.q2 = Number(el("q2").value); state.assessment.answers.q3 = Number(el("q3").value); renderPreview(); }); }); }
+      function renderResults(){ const avg = (state.assessment.answers.q1 + state.assessment.answers.q2 + state.assessment.answers.q3) / 3; const gaps = []; if(state.assessment.answers.q2 <= 2) gaps.push("Data literacy"); if(state.assessment.answers.q3 <= 2) gaps.push("Scope 3 accounting"); if(state.assessment.answers.q1 <= 2) gaps.push("Carbon basics"); el("left").innerHTML = ` <div class="pill good">Step 5</div> <div style="height:16px"></div> <div class="mono font-bold">Results snapshot</div> <div class="sub mb-4">This is what your production results page would summarize.</div> <div class="panel" style="background:#f9fafb;"> <div class="mono font-bold text-gray-500 text-xs">ROLE</div> <div class="mt-1">${state.assessment.role}</div> <div style="height:16px"></div> <div class="mono font-bold text-gray-500 text-xs">READINESS</div> <div class="mt-1 font-bold text-lg text-green-600">${Math.round(avg * 20)} out of 100</div> <div style="height:16px"></div> <div class="mono font-bold text-gray-500 text-xs">TOP GAPS</div> <div class="mt-1 text-red-600">${gaps.length ? gaps.join(", ") : "None detected"}</div> </div> `; }
+      function renderPreview(){ const avg = (state.assessment.answers.q1 + state.assessment.answers.q2 + state.assessment.answers.q3) / 3; const readiness = Math.round(avg * 20); el("preview").innerHTML = ` <div class="mb-3"><strong class="text-gray-900">${state.company.name}</strong> in ${state.company.industry} with ${state.company.size} employees</div> <div class="mb-3"><strong class="text-gray-900 block mb-1">Roles</strong> <div class="text-gray-600">${state.roles.map(r => r.name + " in " + r.dept).join("<br>")}</div></div> <div class="mb-3"><strong class="text-gray-900">Employees</strong> ${state.employees.length} onboarded</div> <div><strong class="text-gray-900 block mb-1">Assessment</strong> ${state.assessment.role} readiness <span class="font-bold text-green-600">${readiness}</span> out of 100</div> `; el("api").textContent = "POST /api/onboard -> { company, roles, employees }\nPOST /api/assessment -> { role, answers }\nGET /api/gaps -> { criticalGaps, recommendedSkills }"; }
+      function render(){ renderSteps(); el("finishBtn").style.display = state.step === flow.length - 1 ? "inline-block" : "none"; el("nextBtn").style.display = state.step === flow.length - 1 ? "none" : "inline-block"; const key = flow[state.step].key; if(key === "company") renderCompany(); if(key === "roles") renderRoles(); if(key === "employees") renderEmployees(); if(key === "assessment") renderAssessment(); if(key === "results") renderResults(); renderPreview(); }
+      function next(){ state.step = Math.min(flow.length - 1, state.step + 1); render(); }
+      function back(){ state.step = Math.max(0, state.step - 1); render(); }
+      el("nextBtn").addEventListener("click", next); el("backBtn").addEventListener("click", back); el("skipBtn").addEventListener("click", () => { state.step = flow.length - 1; render(); }); el("finishBtn").addEventListener("click", () => alert("Mockup complete. In production this would route to the live dashboard."));
+      render();
+    </script>
+  </body>
+</html>

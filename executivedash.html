@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Agreend Mockup Exec Dashboard</title>
+    <style>
+      :root{
+        --bg:#0b0d12;
+        --panel:#111522;
+        --muted:#98a2b3;
+        --text:#e7eaf0;
+        --accent:#7c5cff;
+        --good:#19c37d;
+        --warn:#ffcc00;
+        --bad:#ff4d4f;
+        --card:#0f1422;
+        --border:#1b2340;
+      }
+      html,body{height:100%; margin:0; background:var(--bg); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
+      .wrap{max-width:1180px; margin:0 auto; padding:16px; box-sizing:border-box;}
+      .top{display:flex; justify-content:space-between; align-items:flex-end; gap:12px; flex-wrap:wrap;}
+      h1{margin:0; font-size:18px;}
+      .sub{margin-top:6px; color:var(--muted); font-size:12px; line-height:1.35;}
+      .chips{display:flex; gap:8px; flex-wrap:wrap;}
+      .chip{background:rgba(15,20,34,.92); border:1px solid #223055; border-radius:999px; padding:8px 10px; font-size:12px; color:var(--muted);}
+      .chip strong{color:var(--text);}
+      .grid{display:grid; grid-template-columns: repeat(12, 1fr); gap:12px; margin-top:14px;}
+      .card{background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:12px;}
+      .kpi{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px;}
+      .k{color:var(--muted); font-size:11px;}
+      .v{font-size:20px; margin-top:6px;}
+      .bar{height:10px; background:#0d1220; border:1px solid #223055; border-radius:999px; overflow:hidden; margin-top:10px;}
+      .bar > div{height:100%; width:40%; background:rgba(124,92,255,.55);}
+      table{width:100%; border-collapse:collapse; font-size:12px;}
+      th,td{border-bottom:1px solid #1b2340; padding:10px 8px; text-align:left;}
+      th{color:var(--muted); font-weight:600;}
+      .pill{font-size:11px; padding:6px 8px; border-radius:999px; border:1px solid #233055; color:var(--muted); display:inline-block;}
+      .pill.good{border-color:rgba(25,195,125,.45); color:rgba(25,195,125,.95);}
+      .pill.warn{border-color:rgba(255,204,0,.45); color:rgba(255,204,0,.95);}
+      .pill.bad{border-color:rgba(255,77,79,.45); color:rgba(255,77,79,.95);}
+      .actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;}
+      button{background:#151c31; border:1px solid #233055; color:var(--text); border-radius:12px; padding:10px 10px; cursor:pointer; font-size:12px;}
+      button.primary{background:rgba(124,92,255,.18); border-color:rgba(124,92,255,.5);}
+      .note{color:var(--muted); font-size:12px; line-height:1.35;}
+      .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="top">
+        <div>
+          <h1>Green Skills Gap Intelligence</h1>
+          <div class="sub">
+            V2 intention: an exec view that ties skill readiness to cost, risk, and progress across departments and roles.
+          </div>
+        </div>
+        <div class="chips">
+          <div class="chip"><strong>Company</strong> DemoCo</div>
+          <div class="chip"><strong>Quarter</strong> Q2</div>
+          <div class="chip"><strong>Target</strong> Climate readiness baseline</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card" style="grid-column: span 4;">
+          <div class="kpi">
+            <div class="k">Readiness score</div>
+            <div class="v" id="score">62</div>
+            <div class="bar"><div id="scoreBar"></div></div>
+            <div class="sub" style="margin-top:10px;">
+              Composite of role coverage, critical gaps, and assessment completion.
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: span 4;">
+          <div class="kpi">
+            <div class="k">Money saved to date</div>
+            <div class="v" id="saved">$48,200</div>
+            <div class="sub" style="margin-top:10px;">
+              Estimated reduction in rework, audit hours, and procurement waste based on completed skills.
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: span 4;">
+          <div class="kpi">
+            <div class="k">Critical gaps open</div>
+            <div class="v" id="critical">7</div>
+            <div class="sub" style="margin-top:10px;">
+              These block compliance and cause high risk exposure. Recommended focus list below.
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: span 7;">
+          <div class="k" style="margin-bottom:8px;">Departments</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Department</th>
+                <th>Readiness</th>
+                <th>Assessments</th>
+                <th>Critical gaps</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="deptBody"></tbody>
+          </table>
+          <div class="actions">
+            <button class="primary" id="simulateBtn">Simulate one week of progress</button>
+            <button id="resetBtn">Reset</button>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: span 5;">
+          <div class="k" style="margin-bottom:8px;">Recommended focus</div>
+          <div class="note">
+            These are the top skill gaps by risk weight and number of employees blocked behind them.
+          </div>
+          <div style="height:10px"></div>
+          <table>
+            <thead>
+              <tr>
+                <th>Skill</th>
+                <th>Blocked employees</th>
+                <th>Risk weight</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="focusBody"></tbody>
+          </table>
+          <div style="height:10px"></div>
+          <div class="note">
+            Pitch line: we can tie learning to dollars saved and risk reduced, so leadership can fund the right training first.
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: span 12;">
+          <div class="k">Export preview</div>
+          <div class="note mono" id="exportLine" style="margin-top:8px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const base = {
+        score:62,
+        saved:48200,
+        critical:7,
+        depts:[
+          {name:"Operations", readiness:58, assessments:71, critical:3},
+          {name:"Procurement", readiness:49, assessments:62, critical:2},
+          {name:"Facilities", readiness:66, assessments:78, critical:1},
+          {name:"Finance", readiness:74, assessments:83, critical:1}
+        ],
+        focus:[
+          {skill:"Supplier mapping", blocked:18, risk:9},
+          {skill:"Scope 3 accounting", blocked:12, risk:10},
+          {skill:"Data quality checks", blocked:15, risk:8},
+          {skill:"Audit evidence capture", blocked:9, risk:7}
+        ]
+      };
+
+      let s = JSON.parse(JSON.stringify(base));
+
+      const el = (id) => document.getElementById(id);
+
+      function pillFor(readiness, critical){
+        if(critical >= 3) return '<span class="pill bad">At risk</span>';
+        if(readiness < 60) return '<span class="pill warn">Needs focus</span>';
+        return '<span class="pill good">On track</span>';
+      }
+
+      function money(n){
+        return "$" + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      function render(){
+        el("score").textContent = s.score;
+        el("saved").textContent = money(s.saved);
+        el("critical").textContent = s.critical;
+
+        el("scoreBar").style.width = Math.max(6, Math.min(100, s.score)) + "%";
+
+        const deptBody = el("deptBody");
+        deptBody.innerHTML = "";
+        for(const d of s.depts){
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${d.name}</td>
+            <td>${d.readiness}</td>
+            <td>${d.assessments}%</td>
+            <td>${d.critical}</td>
+            <td>${pillFor(d.readiness, d.critical)}</td>
+          `;
+          deptBody.appendChild(tr);
+        }
+
+        const focusBody = el("focusBody");
+        focusBody.innerHTML = "";
+        for(const f of s.focus){
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${f.skill}</td>
+            <td>${f.blocked}</td>
+            <td>${f.risk}</td>
+            <td><span class="pill warn">Assign training</span></td>
+          `;
+          focusBody.appendChild(tr);
+        }
+
+        el("exportLine").textContent =
+          'GET /api/export.csv?company=DemoCo&quarter=Q2&include=roles,employees,gaps,skills  ->  200 OK  (download starts)';
+      }
+
+      function simulate(){
+        s.score = Math.min(92, s.score + 5);
+        s.saved += 4200;
+        s.critical = Math.max(0, s.critical - 1);
+
+        for(const d of s.depts){
+          d.readiness = Math.min(95, d.readiness + Math.floor(Math.random() * 6));
+          d.assessments = Math.min(100, d.assessments + Math.floor(Math.random() * 5));
+          if(d.critical > 0 && Math.random() > 0.55) d.critical -= 1;
+        }
+
+        for(const f of s.focus){
+          f.blocked = Math.max(0, f.blocked - Math.floor(Math.random() * 4));
+        }
+
+        render();
+      }
+
+      function reset(){
+        s = JSON.parse(JSON.stringify(base));
+        render();
+      }
+
+      el("simulateBtn").addEventListener("click", simulate);
+      el("resetBtn").addEventListener("click", reset);
+
+      render();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1284 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>aGreend EXTREME OVERDRIVE Tree • Cytoscape</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700;900&display=swap');
+
+      :root {
+        --bg: #050505;
+        --neon-cyan: #00f3ff;
+        --neon-pink: #ff007c;
+        --neon-green: #39ff14;
+        --neon-gold: #ffd700;
+        --metal: #2a2a35;
+        --dark-metal: #121218;
+      }
+
+      html, body {
+        height: 100%;
+        margin: 0;
+        background: radial-gradient(circle at center, #1a0b2e 0%, var(--bg) 100%);
+        color: white;
+        font-family: 'Orbitron', sans-serif;
+        overflow: hidden;
+      }
+
+      body::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+          linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+        background-size: 100% 4px, 6px 100%;
+        pointer-events: none;
+        z-index: 999;
+        opacity: 0.35;
+      }
+
+      #cy { position: absolute; inset: 0; }
+
+      .hud {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        box-sizing: border-box;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .jackpot-box {
+        background: var(--dark-metal);
+        border: 4px solid var(--neon-gold);
+        padding: 15px 30px;
+        box-shadow: 0 0 20px var(--neon-gold), inset 0 0 10px var(--neon-gold);
+        text-align: center;
+        transform: skewX(-10deg);
+        animation: pulse-gold 2s infinite;
+      }
+      .jackpot-box h1 {
+        margin: 0;
+        font-family: 'Black Ops One', cursive;
+        font-size: 16px;
+        color: var(--neon-gold);
+        text-shadow: 2px 2px 0px #ff0000;
+      }
+      .jackpot-value {
+        font-size: 42px;
+        font-weight: 900;
+        color: white;
+        text-shadow: 0 0 10px var(--neon-gold), 0 0 20px #ff0000;
+        letter-spacing: 2px;
+      }
+
+      .xp-box {
+        background: var(--dark-metal);
+        border: 4px solid var(--neon-cyan);
+        padding: 15px 30px;
+        box-shadow: 0 0 20px var(--neon-cyan);
+        text-align: center;
+        transform: skewX(10deg);
+        pointer-events: none;
+      }
+      .xp-box h1 { margin: 0; font-size: 16px; color: var(--neon-cyan); }
+      .xp-value { font-size: 36px; font-weight: 900; color: white; text-shadow: 0 0 10px var(--neon-cyan); }
+
+      .hud-actions {
+        position:absolute;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 12;
+        pointer-events: auto;
+        display:flex;
+        gap: 10px;
+      }
+
+      .btn {
+        font-family: 'Orbitron';
+        font-weight: 900;
+        font-size: 14px;
+        padding: 12px 14px;
+        border: none;
+        cursor: pointer;
+        text-transform: uppercase;
+        background: var(--neon-pink);
+        color: #000;
+        box-shadow: 0 0 15px var(--neon-pink);
+      }
+      .btn:hover {
+        background: #fff;
+        box-shadow: 0 0 28px #fff;
+      }
+
+      .item-card {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+        width: 360px;
+        background: rgba(10, 10, 15, 0.95);
+        border: 3px solid var(--neon-pink);
+        padding: 20px;
+        z-index: 20;
+        display: none;
+        box-shadow: 10px 10px 0px rgba(255, 0, 124, 0.3);
+        backdrop-filter: blur(5px);
+        pointer-events: auto;
+      }
+      .item-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%;
+        height: 10px;
+        background: repeating-linear-gradient(45deg, var(--neon-gold), var(--neon-gold) 10px, #000 10px, #000 20px);
+      }
+      .item-title {
+        font-family: 'Black Ops One', cursive;
+        font-size: 22px;
+        color: var(--neon-pink);
+        text-transform: uppercase;
+        margin-top: 5px;
+        text-shadow: 2px 2px 0px #000;
+      }
+      .item-meta {
+        color: var(--neon-cyan);
+        font-size: 14px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid var(--metal);
+        padding-bottom: 5px;
+      }
+      .item-desc {
+        font-family: sans-serif;
+        font-size: 14px;
+        color: #ddd;
+        line-height: 1.5;
+        margin-bottom: 15px;
+      }
+      .item-stats {
+        display: flex;
+        justify-content: space-between;
+        font-size: 18px;
+        font-weight: 900;
+        color: var(--neon-green);
+      }
+      .btn-smash {
+        width: 100%;
+        padding: 15px;
+        margin-top: 18px;
+        font-family: 'Orbitron';
+        font-weight: 900;
+        font-size: 18px;
+        background: var(--neon-green);
+        color: black;
+        border: none;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: all 0.1s;
+        box-shadow: 0 0 15px var(--neon-green);
+      }
+      .btn-smash:hover { background: white; box-shadow: 0 0 30px white; transform: scale(1.05); }
+      .btn-smash:disabled { background: var(--metal); color: #555; box-shadow: none; cursor: not-allowed; transform: none; }
+
+      .shake { animation: screen-shake 0.3s cubic-bezier(.36,.07,.19,.97) both; }
+
+      .results-overlay{
+        position:absolute; inset:0; z-index:80;
+        background: rgba(0,0,0,0.78);
+        backdrop-filter: blur(6px);
+        display:none;
+        align-items:center; justify-content:center;
+        pointer-events:auto;
+      }
+      .results-panel{
+        width: min(760px, calc(100% - 60px));
+        background: rgba(10,10,15,0.96);
+        border: 4px solid var(--neon-gold);
+        box-shadow: 0 0 35px var(--neon-gold), inset 0 0 14px var(--neon-gold);
+        padding: 22px;
+        position: relative;
+      }
+      .results-title{
+        font-family: 'Black Ops One', cursive;
+        font-size: 28px;
+        color: var(--neon-gold);
+        text-shadow: 2px 2px 0 #000, 0 0 14px var(--neon-gold);
+        margin-bottom: 6px;
+      }
+      .results-sub{ color: var(--neon-cyan); font-size: 14px; margin-bottom: 18px; }
+      .results-lines{ display:flex; flex-direction:column; gap: 10px; }
+      .rline{ display:flex; justify-content:space-between; align-items:baseline; padding: 10px 12px; border: 2px solid #2a2a35; background: rgba(0,0,0,0.35); }
+      .rlabel{ color:#fff; font-weight:900; letter-spacing: 1px; text-shadow: 0 0 10px rgba(0,243,255,0.4); }
+      .rval{ color: var(--neon-green); font-weight: 900; font-size: 20px; text-shadow: 0 0 12px var(--neon-green); min-width: 160px; text-align:right; }
+
+      @keyframes pulse-gold { 0%, 100% { box-shadow: 0 0 15px var(--neon-gold); } 50% { box-shadow: 0 0 35px var(--neon-gold), inset 0 0 20px var(--neon-gold); } }
+      @keyframes screen-shake { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-5px, 3px); } 40% { transform: translate(4px, -2px); } 60% { transform: translate(-3px, -4px); } 80% { transform: translate(5px, 5px); } }
+    </style>
+  </head>
+  <body>
+    <div id="cy"></div>
+
+    <div class="hud">
+      <div class="xp-box">
+        <h1>ECO-XP BANK</h1>
+        <div class="xp-value" id="xp">1,250</div>
+      </div>
+      <div class="jackpot-box">
+        <h1>SAVINGS JACKPOT</h1>
+        <div class="jackpot-value" id="money">$14,200</div>
+      </div>
+    </div>
+
+    <div class="hud-actions">
+      <button class="btn" id="resultsBtn">SHOW RESULTS</button>
+      <button class="btn" id="relayoutBtn" style="background:var(--neon-cyan);box-shadow:0 0 15px var(--neon-cyan);">RELAYOUT</button>
+    </div>
+
+    <div class="item-card" id="card">
+      <div class="item-title" id="selTitle">SKILL NAME</div>
+      <div class="item-meta" id="selMeta">RARITY: LEGENDARY</div>
+      <div class="item-desc" id="selDesc">Skill description goes here.</div>
+      <div class="item-stats">
+        <span id="selCost">COST: 50 XP</span>
+        <span id="selGain" style="color: var(--neon-gold);">PAYOUT: $500</span>
+      </div>
+      <button class="btn-smash" id="unlockBtn">OVERRIDE</button>
+    </div>
+
+    <div class="results-overlay" id="results">
+      <div class="results-panel">
+        <div class="results-title">RESULTS SUMMARY</div>
+        <div class="results-sub">Press ESC to close</div>
+        <div class="results-lines" id="resultsLines"></div>
+        <div class="results-footer" style="display:flex;justify-content:flex-end;margin-top:16px;">
+          <button class="btn-smash" id="closeResults" style="background:var(--neon-cyan);box-shadow:0 0 18px var(--neon-cyan);">CLOSE</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+    <script src="https://unpkg.com/dagre@0.8.5/dist/dagre.min.js"></script>
+    <script src="https://unpkg.com/cytoscape-dagre@2.5.0/cytoscape-dagre.js"></script>
+
+    <script>
+      const skills = [
+  {
+    "id": "s1",
+    "title": "CARBON BASICS",
+    "meta": "TIER 1 \u2022 FOUNDATION",
+    "desc": "Unlocks the ability to perceive invisible Scope 1 emissions with the naked eye.",
+    "xpCost": 100,
+    "moneyGain": 1000,
+    "prereq": []
+  },
+  {
+    "id": "s2",
+    "title": "SUPPLIER INTERROGATION",
+    "meta": "TIER 2 \u2022 OFFENSE",
+    "desc": "Rip data directly from the hands of non-compliant vendors.",
+    "xpCost": 250,
+    "moneyGain": 2500,
+    "prereq": [
+      "s1"
+    ]
+  },
+  {
+    "id": "s3",
+    "title": "DATA LAUNDERING",
+    "meta": "TIER 2 \u2022 DEFENSE",
+    "desc": "Scrub dirty data until it shines like a diamond for the auditors.",
+    "xpCost": 250,
+    "moneyGain": 2500,
+    "prereq": [
+      "s1"
+    ]
+  },
+  {
+    "id": "s4",
+    "title": "SCOPE 3 ANNIHILATION",
+    "meta": "TIER 3 \u2022 ULTIMATE",
+    "desc": "Target and destroy supply chain emissions globally. Massive ROI.",
+    "xpCost": 500,
+    "moneyGain": 8200,
+    "prereq": [
+      "s2",
+      "s3"
+    ]
+  },
+  {
+    "id": "s5",
+    "title": "GREENWASH SHIELD",
+    "meta": "TIER 3 \u2022 PASSIVE",
+    "desc": "Immunity to PR disasters. +50% to corporate reputation.",
+    "xpCost": 300,
+    "moneyGain": 4000,
+    "prereq": [
+      "s2"
+    ]
+  },
+  {
+    "id": "s6",
+    "title": "TAXONOMY HACKER",
+    "meta": "TIER 3 \u2022 PASSIVE",
+    "desc": "Instantly decrypt EU compliance frameworks.",
+    "xpCost": 300,
+    "moneyGain": 4000,
+    "prereq": [
+      "s3"
+    ]
+  },
+  {
+    "id": "gate-fam-ca",
+    "title": "CLIMATE ACTION",
+    "meta": "FAMILY GATE \u2022 ACCESS",
+    "desc": "Opens the CLIMATE ACTION lane. Pick a specialty and stack wins.",
+    "xpCost": 180,
+    "moneyGain": 2200,
+    "prereq": [
+      "s1"
+    ]
+  },
+  {
+    "id": "gate-fam-ce",
+    "title": "CIRCULAR ECONOMY",
+    "meta": "FAMILY GATE \u2022 ACCESS",
+    "desc": "Opens the CIRCULAR ECONOMY lane. Pick a specialty and stack wins.",
+    "xpCost": 180,
+    "moneyGain": 2200,
+    "prereq": [
+      "s1"
+    ]
+  },
+  {
+    "id": "gate-fam-so",
+    "title": "SUSTAINABLE OPS",
+    "meta": "FAMILY GATE \u2022 ACCESS",
+    "desc": "Opens the SUSTAINABLE OPS lane. Pick a specialty and stack wins.",
+    "xpCost": 180,
+    "moneyGain": 2200,
+    "prereq": [
+      "s1"
+    ]
+  },
+  {
+    "id": "gate-fam-gi",
+    "title": "GREEN INNOVATION",
+    "meta": "FAMILY GATE \u2022 ACCESS",
+    "desc": "Opens the GREEN INNOVATION lane. Pick a specialty and stack wins.",
+    "xpCost": 180,
+    "moneyGain": 2200,
+    "prereq": [
+      "s1"
+    ]
+  },
+  {
+    "id": "sk-ca-01",
+    "title": "CARBON FOOTPRINT ANALYSIS",
+    "meta": "CLIMATE ACTION \u2022 SKILL",
+    "desc": "Carbon Footprint Analysis. Roles: Sustainability Manager, Operations Manager, Environmental Analyst.",
+    "xpCost": 140,
+    "moneyGain": 1800,
+    "prereq": [
+      "gate-fam-ca"
+    ]
+  },
+  {
+    "id": "sk-ca-02",
+    "title": "CLIMATE RISK ASSESSMENT",
+    "meta": "CLIMATE ACTION \u2022 SKILL",
+    "desc": "Climate Risk Assessment. Roles: Sustainability Manager, Risk Manager.",
+    "xpCost": 175,
+    "moneyGain": 2300,
+    "prereq": [
+      "gate-fam-ca"
+    ]
+  },
+  {
+    "id": "sk-ca-03",
+    "title": "GHG PROTOCOL & REPORTING",
+    "meta": "CLIMATE ACTION \u2022 SKILL",
+    "desc": "GHG Protocol & Reporting. Roles: Sustainability Manager, Environmental Analyst, Compliance Manager.",
+    "xpCost": 210,
+    "moneyGain": 2800,
+    "prereq": [
+      "gate-fam-ca"
+    ]
+  },
+  {
+    "id": "sk-ca-04",
+    "title": "SCIENCE-BASED TARGETS",
+    "meta": "CLIMATE ACTION \u2022 SKILL",
+    "desc": "Science-Based Targets. Roles: Sustainability Manager, Strategy Manager.",
+    "xpCost": 285,
+    "moneyGain": 2450,
+    "prereq": [
+      "gate-fam-ca"
+    ]
+  },
+  {
+    "id": "sk-ca-05",
+    "title": "RENEWABLE ENERGY STRATEGY",
+    "meta": "CLIMATE ACTION \u2022 SKILL",
+    "desc": "Renewable Energy Strategy. Roles: Operations Manager, Sustainability Manager, Facilities Manager.",
+    "xpCost": 180,
+    "moneyGain": 2950,
+    "prereq": [
+      "gate-fam-ca"
+    ]
+  },
+  {
+    "id": "sk-ca-06",
+    "title": "CARBON OFFSET & CREDIT MARKETS",
+    "meta": "CLIMATE ACTION \u2022 SKILL",
+    "desc": "Carbon Offset & Credit Markets. Roles: Sustainability Manager, Finance Manager.",
+    "xpCost": 215,
+    "moneyGain": 3450,
+    "prereq": [
+      "gate-fam-ca"
+    ]
+  },
+  {
+    "id": "sk-ca-07",
+    "title": "CLIMATE ADAPTATION PLANNING",
+    "meta": "CLIMATE ACTION \u2022 SKILL",
+    "desc": "Climate Adaptation Planning. Roles: Risk Manager, Strategy Manager.",
+    "xpCost": 290,
+    "moneyGain": 3100,
+    "prereq": [
+      "gate-fam-ca"
+    ]
+  },
+  {
+    "id": "sk-ca-08",
+    "title": "NET-ZERO PATHWAY DESIGN",
+    "meta": "CLIMATE ACTION \u2022 SKILL",
+    "desc": "Net-Zero Pathway Design. Roles: Sustainability Manager, Strategy Manager.",
+    "xpCost": 325,
+    "moneyGain": 3600,
+    "prereq": [
+      "gate-fam-ca"
+    ]
+  },
+  {
+    "id": "sk-ca-09",
+    "title": "ENERGY EFFICIENCY AUDITING",
+    "meta": "CLIMATE ACTION \u2022 SKILL",
+    "desc": "Energy Efficiency Auditing. Roles: Operations Manager, Facilities Manager, Environmental Analyst.",
+    "xpCost": 220,
+    "moneyGain": 4100,
+    "prereq": [
+      "gate-fam-ca"
+    ]
+  },
+  {
+    "id": "sk-ca-10",
+    "title": "CLIMATE POLICY & REGULATION",
+    "meta": "CLIMATE ACTION \u2022 SKILL",
+    "desc": "Climate Policy & Regulation. Roles: Compliance Manager, Sustainability Manager.",
+    "xpCost": 295,
+    "moneyGain": 3750,
+    "prereq": [
+      "gate-fam-ca"
+    ]
+  },
+  {
+    "id": "sk-ca-11",
+    "title": "SCOPE 3 EMISSIONS MANAGEMENT",
+    "meta": "CLIMATE ACTION \u2022 SKILL",
+    "desc": "Scope 3 Emissions Management. Roles: Sustainability Manager, Supply Chain Manager, Operations Manager.",
+    "xpCost": 330,
+    "moneyGain": 4250,
+    "prereq": [
+      "gate-fam-ca"
+    ]
+  },
+  {
+    "id": "sk-ca-12",
+    "title": "CLIMATE DATA ANALYTICS",
+    "meta": "CLIMATE ACTION \u2022 SKILL",
+    "desc": "Climate Data Analytics. Roles: Environmental Analyst, Data Manager.",
+    "xpCost": 365,
+    "moneyGain": 4750,
+    "prereq": [
+      "gate-fam-ca"
+    ]
+  },
+  {
+    "id": "sk-ce-01",
+    "title": "CIRCULAR PRODUCT DESIGN",
+    "meta": "CIRCULAR ECONOMY \u2022 SKILL",
+    "desc": "Circular Product Design. Roles: Product Manager, Innovation Manager.",
+    "xpCost": 140,
+    "moneyGain": 1800,
+    "prereq": [
+      "gate-fam-ce"
+    ]
+  },
+  {
+    "id": "sk-ce-02",
+    "title": "WASTE STREAM ANALYSIS",
+    "meta": "CIRCULAR ECONOMY \u2022 SKILL",
+    "desc": "Waste Stream Analysis. Roles: Operations Manager, Facilities Manager, Environmental Analyst.",
+    "xpCost": 175,
+    "moneyGain": 2300,
+    "prereq": [
+      "gate-fam-ce"
+    ]
+  },
+  {
+    "id": "sk-ce-03",
+    "title": "MATERIAL FLOW ACCOUNTING",
+    "meta": "CIRCULAR ECONOMY \u2022 SKILL",
+    "desc": "Material Flow Accounting. Roles: Operations Manager, Supply Chain Manager.",
+    "xpCost": 210,
+    "moneyGain": 2800,
+    "prereq": [
+      "gate-fam-ce"
+    ]
+  },
+  {
+    "id": "sk-ce-04",
+    "title": "EXTENDED PRODUCER RESPONSIBILITY",
+    "meta": "CIRCULAR ECONOMY \u2022 SKILL",
+    "desc": "Extended Producer Responsibility. Roles: Compliance Manager, Product Manager.",
+    "xpCost": 285,
+    "moneyGain": 2450,
+    "prereq": [
+      "gate-fam-ce"
+    ]
+  },
+  {
+    "id": "sk-ce-05",
+    "title": "RECYCLING & RECOVERY SYSTEMS",
+    "meta": "CIRCULAR ECONOMY \u2022 SKILL",
+    "desc": "Recycling & Recovery Systems. Roles: Operations Manager, Facilities Manager.",
+    "xpCost": 180,
+    "moneyGain": 2950,
+    "prereq": [
+      "gate-fam-ce"
+    ]
+  },
+  {
+    "id": "sk-ce-06",
+    "title": "SUSTAINABLE PACKAGING",
+    "meta": "CIRCULAR ECONOMY \u2022 SKILL",
+    "desc": "Sustainable Packaging. Roles: Product Manager, Supply Chain Manager, Marketing Manager.",
+    "xpCost": 215,
+    "moneyGain": 3450,
+    "prereq": [
+      "gate-fam-ce"
+    ]
+  },
+  {
+    "id": "sk-ce-07",
+    "title": "LIFE CYCLE ASSESSMENT",
+    "meta": "CIRCULAR ECONOMY \u2022 SKILL",
+    "desc": "Life Cycle Assessment. Roles: Environmental Analyst, Product Manager, Sustainability Manager.",
+    "xpCost": 290,
+    "moneyGain": 3100,
+    "prereq": [
+      "gate-fam-ce"
+    ]
+  },
+  {
+    "id": "sk-ce-08",
+    "title": "REMANUFACTURING & REFURBISHMENT",
+    "meta": "CIRCULAR ECONOMY \u2022 SKILL",
+    "desc": "Remanufacturing & Refurbishment. Roles: Operations Manager, Product Manager.",
+    "xpCost": 325,
+    "moneyGain": 3600,
+    "prereq": [
+      "gate-fam-ce"
+    ]
+  },
+  {
+    "id": "sk-ce-09",
+    "title": "CIRCULAR BUSINESS MODELS",
+    "meta": "CIRCULAR ECONOMY \u2022 SKILL",
+    "desc": "Circular Business Models. Roles: Strategy Manager, Innovation Manager, Marketing Manager.",
+    "xpCost": 220,
+    "moneyGain": 4100,
+    "prereq": [
+      "gate-fam-ce"
+    ]
+  },
+  {
+    "id": "sk-ce-10",
+    "title": "INDUSTRIAL SYMBIOSIS",
+    "meta": "CIRCULAR ECONOMY \u2022 SKILL",
+    "desc": "Industrial Symbiosis. Roles: Operations Manager, Strategy Manager.",
+    "xpCost": 295,
+    "moneyGain": 3750,
+    "prereq": [
+      "gate-fam-ce"
+    ]
+  },
+  {
+    "id": "sk-ce-11",
+    "title": "ZERO-WASTE STRATEGY",
+    "meta": "CIRCULAR ECONOMY \u2022 SKILL",
+    "desc": "Zero-Waste Strategy. Roles: Sustainability Manager, Facilities Manager, Operations Manager.",
+    "xpCost": 330,
+    "moneyGain": 4250,
+    "prereq": [
+      "gate-fam-ce"
+    ]
+  },
+  {
+    "id": "sk-ce-12",
+    "title": "BIOMIMICRY & BIO-BASED MATERIALS",
+    "meta": "CIRCULAR ECONOMY \u2022 SKILL",
+    "desc": "Biomimicry & Bio-Based Materials. Roles: Innovation Manager, Product Manager.",
+    "xpCost": 365,
+    "moneyGain": 4750,
+    "prereq": [
+      "gate-fam-ce"
+    ]
+  },
+  {
+    "id": "sk-so-01",
+    "title": "GREEN SUPPLY CHAIN MANAGEMENT",
+    "meta": "SUSTAINABLE OPS \u2022 SKILL",
+    "desc": "Green Supply Chain Management. Roles: Supply Chain Manager, Operations Manager, Procurement Manager.",
+    "xpCost": 140,
+    "moneyGain": 1800,
+    "prereq": [
+      "gate-fam-so"
+    ]
+  },
+  {
+    "id": "sk-so-02",
+    "title": "WATER STEWARDSHIP",
+    "meta": "SUSTAINABLE OPS \u2022 SKILL",
+    "desc": "Water Stewardship. Roles: Facilities Manager, Operations Manager, Environmental Analyst.",
+    "xpCost": 175,
+    "moneyGain": 2300,
+    "prereq": [
+      "gate-fam-so"
+    ]
+  },
+  {
+    "id": "sk-so-03",
+    "title": "SUSTAINABLE PROCUREMENT",
+    "meta": "SUSTAINABLE OPS \u2022 SKILL",
+    "desc": "Sustainable Procurement. Roles: Procurement Manager, Supply Chain Manager.",
+    "xpCost": 210,
+    "moneyGain": 2800,
+    "prereq": [
+      "gate-fam-so"
+    ]
+  },
+  {
+    "id": "sk-so-04",
+    "title": "ENVIRONMENTAL MANAGEMENT SYSTEMS",
+    "meta": "SUSTAINABLE OPS \u2022 SKILL",
+    "desc": "Environmental Management Systems. Roles: Compliance Manager, Operations Manager, Sustainability Manager.",
+    "xpCost": 285,
+    "moneyGain": 2450,
+    "prereq": [
+      "gate-fam-so"
+    ]
+  },
+  {
+    "id": "sk-so-05",
+    "title": "POLLUTION PREVENTION",
+    "meta": "SUSTAINABLE OPS \u2022 SKILL",
+    "desc": "Pollution Prevention. Roles: Environmental Analyst, Operations Manager, Facilities Manager.",
+    "xpCost": 180,
+    "moneyGain": 2950,
+    "prereq": [
+      "gate-fam-so"
+    ]
+  },
+  {
+    "id": "sk-so-06",
+    "title": "BIODIVERSITY IMPACT ASSESSMENT",
+    "meta": "SUSTAINABLE OPS \u2022 SKILL",
+    "desc": "Biodiversity Impact Assessment. Roles: Environmental Analyst, Sustainability Manager.",
+    "xpCost": 215,
+    "moneyGain": 3450,
+    "prereq": [
+      "gate-fam-so"
+    ]
+  },
+  {
+    "id": "sk-so-07",
+    "title": "GREEN BUILDING & FACILITIES",
+    "meta": "SUSTAINABLE OPS \u2022 SKILL",
+    "desc": "Green Building & Facilities. Roles: Facilities Manager, Operations Manager.",
+    "xpCost": 290,
+    "moneyGain": 3100,
+    "prereq": [
+      "gate-fam-so"
+    ]
+  },
+  {
+    "id": "sk-so-08",
+    "title": "SUSTAINABLE LOGISTICS",
+    "meta": "SUSTAINABLE OPS \u2022 SKILL",
+    "desc": "Sustainable Logistics. Roles: Supply Chain Manager, Operations Manager.",
+    "xpCost": 325,
+    "moneyGain": 3600,
+    "prereq": [
+      "gate-fam-so"
+    ]
+  },
+  {
+    "id": "sk-so-09",
+    "title": "OCCUPATIONAL HEALTH & GREEN SAFETY",
+    "meta": "SUSTAINABLE OPS \u2022 SKILL",
+    "desc": "Occupational Health & Green Safety. Roles: HR Manager, Operations Manager, Facilities Manager.",
+    "xpCost": 220,
+    "moneyGain": 4100,
+    "prereq": [
+      "gate-fam-so"
+    ]
+  },
+  {
+    "id": "sk-so-10",
+    "title": "SUPPLIER SUSTAINABILITY AUDITING",
+    "meta": "SUSTAINABLE OPS \u2022 SKILL",
+    "desc": "Supplier Sustainability Auditing. Roles: Procurement Manager, Compliance Manager, Supply Chain Manager.",
+    "xpCost": 295,
+    "moneyGain": 3750,
+    "prereq": [
+      "gate-fam-so"
+    ]
+  },
+  {
+    "id": "sk-so-11",
+    "title": "RESOURCE EFFICIENCY OPTIMIZATION",
+    "meta": "SUSTAINABLE OPS \u2022 SKILL",
+    "desc": "Resource Efficiency Optimization. Roles: Operations Manager, Facilities Manager, Data Manager.",
+    "xpCost": 330,
+    "moneyGain": 4250,
+    "prereq": [
+      "gate-fam-so"
+    ]
+  },
+  {
+    "id": "sk-so-12",
+    "title": "CHEMICAL MANAGEMENT & REACH",
+    "meta": "SUSTAINABLE OPS \u2022 SKILL",
+    "desc": "Chemical Management & REACH. Roles: Compliance Manager, Operations Manager.",
+    "xpCost": 365,
+    "moneyGain": 4750,
+    "prereq": [
+      "gate-fam-so"
+    ]
+  },
+  {
+    "id": "sk-gi-01",
+    "title": "GREEN TECHNOLOGY SCOUTING",
+    "meta": "GREEN INNOVATION \u2022 SKILL",
+    "desc": "Green Technology Scouting. Roles: Innovation Manager, Strategy Manager, Technology Manager.",
+    "xpCost": 140,
+    "moneyGain": 1800,
+    "prereq": [
+      "gate-fam-gi"
+    ]
+  },
+  {
+    "id": "sk-gi-02",
+    "title": "SUSTAINABILITY REPORTING (ESG)",
+    "meta": "GREEN INNOVATION \u2022 SKILL",
+    "desc": "Sustainability Reporting (ESG). Roles: Sustainability Manager, Finance Manager, Compliance Manager.",
+    "xpCost": 175,
+    "moneyGain": 2300,
+    "prereq": [
+      "gate-fam-gi"
+    ]
+  },
+  {
+    "id": "sk-gi-03",
+    "title": "GREEN FINANCE & INVESTMENT",
+    "meta": "GREEN INNOVATION \u2022 SKILL",
+    "desc": "Green Finance & Investment. Roles: Finance Manager, Strategy Manager.",
+    "xpCost": 210,
+    "moneyGain": 2800,
+    "prereq": [
+      "gate-fam-gi"
+    ]
+  },
+  {
+    "id": "sk-gi-04",
+    "title": "SUSTAINABLE INNOVATION FRAMEWORKS",
+    "meta": "GREEN INNOVATION \u2022 SKILL",
+    "desc": "Sustainable Innovation Frameworks. Roles: Innovation Manager, Product Manager, Strategy Manager.",
+    "xpCost": 285,
+    "moneyGain": 2450,
+    "prereq": [
+      "gate-fam-gi"
+    ]
+  },
+  {
+    "id": "sk-gi-05",
+    "title": "STAKEHOLDER ENGAGEMENT FOR SUSTAINABILITY",
+    "meta": "GREEN INNOVATION \u2022 SKILL",
+    "desc": "Stakeholder Engagement for Sustainability. Roles: Marketing Manager, Sustainability Manager, HR Manager.",
+    "xpCost": 180,
+    "moneyGain": 2950,
+    "prereq": [
+      "gate-fam-gi"
+    ]
+  },
+  {
+    "id": "sk-gi-06",
+    "title": "GREEN MARKETING & COMMUNICATIONS",
+    "meta": "GREEN INNOVATION \u2022 SKILL",
+    "desc": "Green Marketing & Communications. Roles: Marketing Manager, Sustainability Manager.",
+    "xpCost": 215,
+    "moneyGain": 3450,
+    "prereq": [
+      "gate-fam-gi"
+    ]
+  },
+  {
+    "id": "sk-gi-07",
+    "title": "SUSTAINABILITY DATA & DIGITAL TOOLS",
+    "meta": "GREEN INNOVATION \u2022 SKILL",
+    "desc": "Sustainability Data & Digital Tools. Roles: Data Manager, Technology Manager, Environmental Analyst.",
+    "xpCost": 290,
+    "moneyGain": 3100,
+    "prereq": [
+      "gate-fam-gi"
+    ]
+  },
+  {
+    "id": "sk-gi-08",
+    "title": "CLEAN TECHNOLOGY DEVELOPMENT",
+    "meta": "GREEN INNOVATION \u2022 SKILL",
+    "desc": "Clean Technology Development. Roles: Innovation Manager, Technology Manager.",
+    "xpCost": 325,
+    "moneyGain": 3600,
+    "prereq": [
+      "gate-fam-gi"
+    ]
+  },
+  {
+    "id": "sk-gi-09",
+    "title": "SOCIAL IMPACT & JUST TRANSITION",
+    "meta": "GREEN INNOVATION \u2022 SKILL",
+    "desc": "Social Impact & Just Transition. Roles: HR Manager, Strategy Manager, Sustainability Manager.",
+    "xpCost": 220,
+    "moneyGain": 4100,
+    "prereq": [
+      "gate-fam-gi"
+    ]
+  },
+  {
+    "id": "sk-gi-10",
+    "title": "TAXONOMY & GREEN CLASSIFICATION",
+    "meta": "GREEN INNOVATION \u2022 SKILL",
+    "desc": "Taxonomy & Green Classification. Roles: Compliance Manager, Finance Manager, Sustainability Manager.",
+    "xpCost": 295,
+    "moneyGain": 3750,
+    "prereq": [
+      "gate-fam-gi"
+    ]
+  },
+  {
+    "id": "sk-gi-11",
+    "title": "ECO-DESIGN & CRADLE-TO-CRADLE",
+    "meta": "GREEN INNOVATION \u2022 SKILL",
+    "desc": "Eco-Design & Cradle-to-Cradle. Roles: Product Manager, Innovation Manager.",
+    "xpCost": 330,
+    "moneyGain": 4250,
+    "prereq": [
+      "gate-fam-gi"
+    ]
+  },
+  {
+    "id": "sk-gi-12",
+    "title": "CARBON CAPTURE & REMOVAL TECHNOLOGIES",
+    "meta": "GREEN INNOVATION \u2022 SKILL",
+    "desc": "Carbon Capture & Removal Technologies. Roles: Technology Manager, Innovation Manager, Sustainability Manager.",
+    "xpCost": 365,
+    "moneyGain": 4750,
+    "prereq": [
+      "gate-fam-gi"
+    ]
+  }
+];
+
+      const state = {
+        xp: 1250,
+        money: 14200,
+        unlocked: new Set(["s1"]),
+        selected: null
+      };
+
+      const stats = {
+        xpSpent: 0,
+        moneyGained: 0,
+        unlockCount: 0,
+        byFamily: new Map()
+      };
+
+      const el = (id) => document.getElementById(id);
+
+      function formatInt(n) { return Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+      function formatMoney(n) { return "$" + Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+      function familyOf(id) {
+        if (id.startsWith("sk-ca-")) return "CLIMATE ACTION";
+        if (id.startsWith("sk-ce-")) return "CIRCULAR ECONOMY";
+        if (id.startsWith("sk-so-")) return "SUSTAINABLE OPS";
+        if (id.startsWith("sk-gi-")) return "GREEN INNOVATION";
+        if (id.startsWith("gate-")) return "GATEWAYS";
+        return "CORE TREE";
+      }
+
+      function updateHUD() {
+        el("xp").textContent = formatInt(state.xp);
+        el("money").textContent = formatMoney(state.money);
+      }
+
+      function prereqsMet(skill) {
+        return (skill.prereq || []).every(p => state.unlocked.has(p));
+      }
+
+      function statusOf(skill) {
+        if (state.unlocked.has(skill.id)) return "unlocked";
+        if (!prereqsMet(skill)) return "blocked";
+        if (state.xp < skill.xpCost) return "locked";
+        return "ready";
+      }
+
+      function recordUnlock(skill) {
+        stats.unlockCount += 1;
+        stats.xpSpent += skill.xpCost;
+        stats.moneyGained += skill.moneyGain;
+        const fam = familyOf(skill.id);
+        stats.byFamily.set(fam, (stats.byFamily.get(fam) || 0) + 1);
+      }
+
+      function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+      function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+      async function tallyLine(elVal, from, to, fmt, durationMs) {
+        const start = performance.now();
+        while (true) {
+          const t = (performance.now() - start) / durationMs;
+          const k = t >= 1 ? 1 : easeOutCubic(t);
+          const v = from + (to - from) * k;
+          elVal.textContent = fmt(v);
+          if (t >= 1) break;
+          await sleep(33);
+        }
+      }
+
+      async function showResults() {
+        const overlay = el("results");
+        const lines = el("resultsLines");
+        lines.innerHTML = "";
+        overlay.style.display = "flex";
+
+        const mk = (label) => {
+          const row = document.createElement("div");
+          row.className = "rline";
+          const l = document.createElement("div");
+          l.className = "rlabel";
+          l.textContent = label;
+          const v = document.createElement("div");
+          v.className = "rval";
+          v.textContent = "0";
+          row.appendChild(l);
+          row.appendChild(v);
+          lines.appendChild(row);
+          return v;
+        };
+
+        const v1 = mk("SKILLS UNLOCKED");
+        const v2 = mk("XP SPENT");
+        const v3 = mk("MONEY EARNED");
+
+        const famOrder = ["CORE TREE","GATEWAYS","CLIMATE ACTION","CIRCULAR ECONOMY","SUSTAINABLE OPS","GREEN INNOVATION"];
+        const famVals = [];
+        for (const f of famOrder) {
+          const count = stats.byFamily.get(f) || 0;
+          if (count === 0) continue;
+          famVals.push([f, count, mk(f)]);
+        }
+
+        await sleep(180);
+        await tallyLine(v1, 0, stats.unlockCount, (v)=>formatInt(v), 650);
+        await sleep(120);
+        await tallyLine(v2, 0, stats.xpSpent, (v)=>formatInt(v), 820);
+        await sleep(120);
+        await tallyLine(v3, 0, stats.moneyGained, (v)=>formatMoney(v), 980);
+
+        for (const item of famVals) {
+          await sleep(90);
+          await tallyLine(item[2], 0, item[1], (v)=>formatInt(v), 520);
+        }
+      }
+
+      function hideResults() { el("results").style.display = "none"; }
+
+      // Cytoscape elements
+      const elements = [];
+      for (const s of skills) {
+        elements.push({
+          data: {
+            id: s.id,
+            label: s.title,
+            meta: s.meta,
+            desc: s.desc,
+            xpCost: s.xpCost,
+            moneyGain: s.moneyGain
+          }
+        });
+      }
+      for (const s of skills) {
+        for (const p of (s.prereq || [])) {
+          elements.push({
+            data: {
+              id: `${p}__${s.id}`,
+              source: p,
+              target: s.id
+            }
+          });
+        }
+      }
+
+      cytoscape.use(cytoscapeDagre);
+
+      const cy = cytoscape({
+        container: document.getElementById("cy"),
+        elements,
+        wheelSensitivity: 0.15,
+        style: [
+          {
+            selector: "node",
+            style: {
+              "shape": "round-rectangle",
+              "width": 220,
+              "height": 86,
+              "background-color": "#0a0a0a",
+              "border-width": 4,
+              "border-color": "#444",
+              "label": "data(label)",
+              "text-wrap": "wrap",
+              "text-max-width": 190,
+              "text-valign": "center",
+              "text-halign": "center",
+              "font-family": "Orbitron",
+              "font-size": 16,
+              "font-weight": 900,
+              "color": "#aaa"
+            }
+          },
+          {
+            selector: "edge",
+            style: {
+              "curve-style": "bezier",
+              "target-arrow-shape": "triangle",
+              "target-arrow-color": "#333",
+              "line-color": "#333",
+              "width": 4,
+              "arrow-scale": 0.8,
+              "opacity": 0.95
+            }
+          },
+          {
+            selector: "node.unlocked",
+            style: {
+              "border-color": "var(--neon-green)",
+              "background-color": "#052205",
+              "color": "#fff",
+              "shadow-blur": 18,
+              "shadow-color": "var(--neon-green)",
+              "shadow-opacity": 0.9
+            }
+          },
+          {
+            selector: "node.ready",
+            style: {
+              "border-color": "var(--neon-cyan)",
+              "background-color": "#041a1f",
+              "color": "#fff",
+              "shadow-blur": 16,
+              "shadow-color": "var(--neon-cyan)",
+              "shadow-opacity": 0.8
+            }
+          },
+          {
+            selector: "node.locked",
+            style: {
+              "border-color": "#333",
+              "background-color": "#0a0a0a",
+              "color": "#555",
+              "opacity": 0.9
+            }
+          },
+          {
+            selector: "node.blocked",
+            style: {
+              "border-color": "#aa0000",
+              "background-color": "#1a0000",
+              "color": "#aa0000"
+            }
+          },
+          {
+            selector: "edge.ready",
+            style: {
+              "line-color": "var(--neon-cyan)",
+              "target-arrow-color": "var(--neon-cyan)",
+              "width": 6,
+              "line-style": "dashed",
+              "line-dash-pattern": [12, 8],
+              "shadow-blur": 14,
+              "shadow-color": "var(--neon-cyan)",
+              "shadow-opacity": 0.7
+            }
+          },
+          {
+            selector: "edge.unlocked",
+            style: {
+              "line-color": "var(--neon-green)",
+              "target-arrow-color": "var(--neon-green)",
+              "width": 6,
+              "shadow-blur": 18,
+              "shadow-color": "var(--neon-green)",
+              "shadow-opacity": 0.9
+            }
+          },
+          {
+            selector: "edge.opening",
+            style: {
+              "line-color": "var(--neon-gold)",
+              "target-arrow-color": "var(--neon-gold)",
+              "width": 10,
+              "shadow-blur": 22,
+              "shadow-color": "var(--neon-gold)",
+              "shadow-opacity": 1.0
+            }
+          },
+          {
+            selector: "node:selected",
+            style: {
+              "border-color": "var(--neon-gold)",
+              "shadow-blur": 22,
+              "shadow-color": "var(--neon-gold)",
+              "shadow-opacity": 1.0
+            }
+          }
+        ],
+        layout: {
+          name: "dagre",
+          rankDir: "TB",
+          nodeSep: 60,
+          rankSep: 110,
+          edgeSep: 10
+        }
+      });
+
+      function applyStatuses() {
+        cy.nodes().forEach(n => {
+          n.removeClass("unlocked ready locked blocked");
+          const s = skills.find(x => x.id === n.id());
+          if (!s) return;
+          n.addClass(statusOf(s));
+        });
+
+        cy.edges().forEach(e => {
+          e.removeClass("unlocked ready opening");
+          const targetId = e.data("target");
+          const targetSkill = skills.find(x => x.id === targetId);
+          if (!targetSkill) return;
+
+          const st = statusOf(targetSkill);
+          if (st === "unlocked") e.addClass("unlocked");
+          else if (st === "ready" || st === "locked") e.addClass("ready");
+        });
+      }
+
+      function relayout() {
+        cy.layout({
+          name: "dagre",
+          rankDir: "TB",
+          nodeSep: 60,
+          rankSep: 110,
+          edgeSep: 10
+        }).run();
+      }
+
+      function selectSkill(id) {
+        const s = skills.find(x => x.id === id);
+        if (!s) return;
+        state.selected = id;
+
+        el("selTitle").textContent = s.title;
+        el("selMeta").textContent = s.meta;
+        el("selDesc").textContent = s.desc;
+        el("selCost").textContent = `COST: ${formatInt(s.xpCost)} XP`;
+        el("selGain").textContent = `PAYOUT: ${formatMoney(s.moneyGain)}`;
+
+        const st = statusOf(s);
+        const btn = el("unlockBtn");
+        if (st === "unlocked") { btn.textContent = "ALREADY OWNED"; btn.disabled = true; }
+        else if (st === "blocked") { btn.textContent = "PREREQUISITES NOT MET"; btn.disabled = true; }
+        else if (st === "locked") { btn.textContent = "NOT ENOUGH XP"; btn.disabled = true; }
+        else { btn.textContent = "SMASH TO UNLOCK"; btn.disabled = false; }
+
+        el("card").style.display = "block";
+      }
+
+      function animateOpeningEdges(unlockedId) {
+        const incoming = cy.edges().filter(e => e.data("target") === unlockedId);
+        incoming.addClass("opening");
+        setTimeout(() => incoming.removeClass("opening"), 700);
+      }
+
+      function unlockSelected() {
+        const s = skills.find(x => x.id === state.selected);
+        if (!s || statusOf(s) !== "ready") return;
+
+        document.body.classList.add("shake");
+        setTimeout(() => document.body.classList.remove("shake"), 300);
+
+        state.xp -= s.xpCost;
+        state.money += s.moneyGain;
+        state.unlocked.add(s.id);
+        recordUnlock(s);
+
+        updateHUD();
+        applyStatuses();
+        animateOpeningEdges(s.id);
+        selectSkill(s.id);
+
+        const n = cy.getElementById(s.id);
+        if (n) {
+          n.animate({ style: { "border-width": 8 } }, { duration: 220 })
+           .promise("completed")
+           .then(() => n.animate({ style: { "border-width": 4 } }, { duration: 240 }));
+        }
+      }
+
+      cy.on("tap", "node", (evt) => {
+        selectSkill(evt.target.id());
+      });
+
+      el("unlockBtn").addEventListener("click", unlockSelected);
+      el("card").addEventListener("click", (e) => { if (e.target.id !== "unlockBtn") el("card").style.display = "none"; });
+
+      el("resultsBtn").addEventListener("click", showResults);
+      el("closeResults").addEventListener("click", hideResults);
+      window.addEventListener("keydown", (e) => { if (e.key === "Escape") hideResults(); });
+      el("relayoutBtn").addEventListener("click", relayout);
+
+      updateHUD();
+      applyStatuses();
+
+      setTimeout(() => { cy.fit(undefined, 40); }, 80);
+    </script>
+  </body>
+</html>

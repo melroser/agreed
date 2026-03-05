@@ -1,0 +1,212 @@
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); width: 100%; max-width: 500px;
+              padding: 40px; position: relative; z-index: 10;
+                      transform: scale(0.9); opacity: 0; animation: modalIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+                            }
+
+                                  h1 { margin: 0 0 8px 0; font-size: 28px; font-weight: 800; text-align: center; color: var(--text); }
+                                        .sub { text-align: center; color: var(--muted); font-size: 15px; margin-bottom: 32px; font-weight: 500; }
+
+                                              .tally-list { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+                                                    .tally-row {
+                                                            display: flex; justify-content: space-between; align-items: center;
+                                                                    padding: 16px; background: #f9fafb; border: 1px solid var(--border); border-radius<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>aGreend XP Tally</title>
+    <style>
+      :root{
+        --bg: #f9fafb;
+        --panel: #ffffff;
+        --text: #111827;
+        --muted: #6b7280;
+        --accent: #16a34a;
+        --accent-light: #dcfce7;
+        --gold: #f59e0b;
+        --border: #e5e7eb;
+      }
+      html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+      
+      .modal {
+        background: var(--panel); border: 1px solid var(--border); border-radius: 24px;
+  : 12px;
+        opacity: 0; transform: translateX(-20px);
+      }
+      .tally-row.show {
+        opacity: 1; transform: translateX(0);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .row-label { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 15px; color: var(--text); }
+      .icon { font-size: 20px; }
+      .row-score { font-family: ui-monospace, monospace; font-size: 18px; font-weight: 700; color: var(--muted); }
+      .row-score.done { color: var(--accent); animation: pop 0.3s ease-out; }
+
+      .divider { height: 2px; background: var(--border); margin: 24px 0; opacity: 0; }
+
+      .total-section { text-align: center; opacity: 0; transform: scale(0.5); }
+      .total-label { font-size: 14px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+      .total-score { 
+        font-size: 64px; font-weight: 900; color: var(--accent); line-height: 1; margin-top: 8px;
+        text-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+      }
+
+      .btn-wrap { margin-top: 32px; text-align: center; opacity: 0; }
+      button {
+        background: var(--accent); color: white; border: none; padding: 14px 32px; border-radius: 999px;
+        font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+        box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.3);
+      }
+      button:hover { background: #15803d; transform: translateY(-2px); box-shadow: 0 6px 12px -2px rgba(22, 163, 74, 0.4); }
+
+      /* Level Up Stamp */
+      .level-up {
+        position: absolute; top: -20px; right: -20px; background: var(--gold); color: white;
+        font-weight: 900; font-size: 20px; padding: 12px 24px; border-radius: 12px;
+        transform: rotate(12deg) scale(5); opacity: 0; box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.4);
+        border: 4px solid white;
+      }
+      .level-up.slam {
+        animation: stampSlam 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      }
+
+      /* Animations */
+      @keyframes modalIn { to { opacity: 1; transform: scale(1); } }
+      @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+      @keyframes stampSlam { 0% { opacity: 0; transform: rotate(25deg) scale(5); } 100% { opacity: 1; transform: rotate(12deg) scale(1); } }
+      @keyframes slamTotal { 
+        0% { opacity: 0; transform: scale(3); } 
+        60% { opacity: 1; transform: scale(0.9); } 
+        100% { opacity: 1; transform: scale(1); } 
+      }
+      
+      /* Confetti */
+      .confetti { position: absolute; width: 10px; height: 10px; z-index: 1; pointer-events: none; }
+      @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
+    </style>
+  </head>
+  <body>
+    <div class="modal">
+      <div class="level-up" id="levelUpStamp">LEVEL UP!</div>
+      <h1>Assessment Complete</h1>
+      <div class="sub">Calculating your environmental impact...</div>
+
+      <div class="tally-list">
+        <div class="tally-row" id="row1">
+          <div class="row-label"><span class="icon">📝</span> Base Knowledge XP</div>
+          <div class="row-score" id="score1">0</div>
+        </div>
+        <div class="tally-row" id="row2">
+          <div class="row-label"><span class="icon">🎯</span> Critical Gaps Closed</div>
+          <div class="row-score" id="score2">0</div>
+        </div>
+        <div class="tally-row" id="row3">
+          <div class="row-label"><span class="icon">⚡</span> Role Alignment Bonus</div>
+          <div class="row-score" id="score3">0</div>
+        </div>
+      </div>
+
+      <div class="divider" id="divider"></div>
+
+      <div class="total-section" id="totalSection">
+        <div class="total-label">Total XP Earned</div>
+        <div class="total-score" id="totalScore">0</div>
+      </div>
+
+      <div class="btn-wrap" id="btnWrap">
+        <button onclick="window.location.href='competition-mock.html'">View Leaderboard 🏆</button>
+      </div>
+    </div>
+
+    <script>
+      const el = (id) => document.getElementById(id);
+      const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+      // The Scores
+      const scores = [
+        { id: 'score1', row: 'row1', target: 1200 },
+        { id: 'score2', row: 'row2', target: 800 },
+        { id: 'score3', row: 'row3', target: 500 }
+      ];
+      const grandTotal = scores.reduce((acc, curr) => acc + curr.target, 0);
+
+      // Number counter animation
+      async function countUp(elementId, target, duration = 600) {
+        const element = el(elementId);
+        const steps = 30;
+        const stepTime = duration / steps;
+        let current = 0;
+        const increment = target / steps;
+
+        return new Promise(resolve => {
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              element.textContent = "+" + target;
+              element.classList.add('done');
+              clearInterval(timer);
+              resolve();
+            } else {
+              element.textContent = "+" + Math.floor(current);
+            }
+          }, stepTime);
+        });
+      }
+
+      // Mario Party Tally Sequence
+      async function runSequence() {
+        await sleep(600); // Initial pause
+
+        // 1. Tally up the rows one by one
+        for (const item of scores) {
+          el(item.row).classList.add('show');
+          await sleep(200); // slight pause before counting
+          await countUp(item.id, item.target, 500);
+          await sleep(300); // Dramatic pause between rows
+        }
+
+        // 2. The buildup
+        await sleep(400);
+        el('divider').style.opacity = '1';
+        await sleep(400);
+
+        // 3. The GRAND TOTAL SLAM
+        const totalSec = el('totalSection');
+        totalSec.style.animation = 'slamTotal 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+        
+        // Count total super fast
+        await countUp('totalScore', grandTotal, 400);
+        
+        // 4. FIRE CONFETTI & STAMP
+        fireConfetti();
+        el('levelUpStamp').classList.add('slam');
+
+        // 5. Show button
+        await sleep(800);
+        el('btnWrap').style.transition = 'opacity 0.5s';
+        el('btnWrap').style.opacity = '1';
+      }
+
+      // Simple Confetti Generator
+      function fireConfetti() {
+        const colors = ['#16a34a', '#22c55e', '#f59e0b', '#34d399', '#ffffff'];
+        for (let i = 0; i < 80; i++) {
+          const conf = document.createElement('div');
+          conf.className = 'confetti';
+          conf.style.left = Math.random() * 100 + 'vw';
+          conf.style.top = '-20px';
+          conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          conf.style.animation = `fall ${Math.random() * 2 + 2}s linear forwards`;
+          // Random spin
+          conf.style.transform = `rotate(${Math.random() * 360}deg)`;
+          document.body.appendChild(conf);
+        }
+      }
+
+      // Start the magic
+      window.onload = runSequence;
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,226 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>aGreend Dept Race</title>
+    <style>
+      :root {
+        --bg: #f3f4f6;
+        --panel: #ffffff;
+        --text: #111827;
+        --muted: #6b7280;
+        --accent: #16a34a; /* Operations Green */
+        --rival1: #3b82f6; /* Procurement Blue */
+        --rival2: #f59e0b; /* Facilities Orange */
+        --border: #e5e7eb;
+      }
+      
+      html, body { 
+        height: 100%; margin: 0; background: var(--bg); color: var(--text); 
+        font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; 
+        display: flex; flex-direction: column; overflow: hidden;
+      }
+
+      /* Header */
+      .header {
+        background: #111827; color: white; padding: 20px 40px;
+        display: flex; justify-content: space-between; align-items: center;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); z-index: 10;
+      }
+      .header h1 { margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -1px; display: flex; align-items: center; gap: 12px;}
+      .header .logo { color: var(--accent); }
+      .header .meta { font-size: 20px; font-weight: 500; color: #9ca3af; }
+
+      /* Main Content Grid */
+      .main {
+        flex: 1; padding: 32px 40px; display: grid; 
+        grid-template-columns: 2.5fr 1fr; gap: 32px; box-sizing: border-box;
+      }
+
+      /* Cards */
+      .card {
+        background: var(--panel); border-radius: 24px; padding: 32px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        display: flex; flex-direction: column;
+      }
+
+      .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+      .card-title { font-size: 20px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+      
+      /* Legend */
+      .legend { display: flex; gap: 20px; }
+      .legend-item { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--text); }
+      .dot { width: 12px; height: 12px; border-radius: 50%; }
+
+      /* Chart Area */
+      .chart-container { flex: 1; position: relative; width: 100%; height: 100%; min-height: 400px; }
+      svg { width: 100%; height: 100%; overflow: visible; }
+      
+      .grid-line { stroke: #f3f4f6; stroke-width: 2; }
+      .axis-text { fill: #9ca3af; font-size: 14px; font-weight: 600; font-family: sans-serif; }
+      
+      .race-line { stroke-width: 6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .race-point { fill: white; stroke-width: 4; }
+
+      /* Smooth Radar Ping Animation for the Leader */
+      @keyframes radar-ping {
+        0% { r: 6; opacity: 0.8; stroke-width: 4; }
+        100% { r: 24; opacity: 0; stroke-width: 0; }
+      }
+      .leader-ping { fill: none; animation: radar-ping 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite; }
+
+      /* Side Panel Metrics */
+      .metrics-grid { display: flex; flex-direction: column; gap: 24px; height: 100%; }
+      
+      .metric-box {
+        background: #f9fafb; border: 2px solid var(--border); border-radius: 16px; padding: 24px;
+        text-align: center; display: flex; flex-direction: column; justify-content: center;
+      }
+      .metric-box.good { border-color: #bbf7d0; background: #f0fdf4; }
+      .metric-box.rival { border-color: #fed7aa; background: #fffbeb; }
+
+      .m-label { font-size: 14px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+      .m-value { font-size: 64px; font-weight: 900; margin: 8px 0; line-height: 1; }
+      .good .m-value { color: var(--accent); }
+      .rival .m-value { color: var(--rival2); }
+      .m-sub { font-size: 16px; font-weight: 600; color: var(--text); }
+
+      /* The Marquee Ticker */
+      .ticker-wrap {
+        background: #111827; color: white; height: 60px;
+        display: flex; align-items: center; overflow: hidden; position: relative;
+        font-size: 24px; font-weight: 700; letter-spacing: 0.5px;
+      }
+      .ticker-title {
+        background: var(--accent); color: white; height: 100%; padding: 0 30px; display: flex; align-items: center;
+        position: relative; z-index: 2; font-weight: 900; text-transform: uppercase; box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+      }
+      .ticker-move {
+        display: inline-block; white-space: nowrap;
+        animation: ticker 25s linear infinite; padding-left: 100%;
+      }
+      .ticker-item { margin-right: 80px; display: inline-flex; align-items: center; gap: 12px; }
+
+      /* Path drawing animation */
+      .draw-anim { stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: draw 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+      @keyframes draw { to { stroke-dashoffset: 0; } }
+      @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+    </style>
+  </head>
+  <body>
+    
+    <div class="header">
+      <h1><span class="logo">🌱</span> aGreend Wallboard</h1>
+      <div class="meta">Q2 COMPETITION STANDINGS</div>
+    </div>
+
+    <div class="main">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Department XP Race</div>
+          <div class="legend">
+            <div class="legend-item"><div class="dot" style="background: var(--accent);"></div> Operations (You)</div>
+            <div class="legend-item"><div class="dot" style="background: var(--rival2);"></div> Facilities</div>
+            <div class="legend-item"><div class="dot" style="background: var(--rival1);"></div> Procurement</div>
+          </div>
+        </div>
+        <div class="chart-container" id="chartBox">
+          <svg id="svgChart" viewBox="0 0 800 400" preserveAspectRatio="none">
+            <g id="grid"></g>
+            <g id="paths"></g>
+            <g id="points"></g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-box good">
+          <div class="m-label">Currently in 1st Place 🥇</div>
+          <div class="m-value">85k</div>
+          <div class="m-sub">Operations Department</div>
+        </div>
+
+        <div class="metric-box rival">
+          <div class="m-label">Closing the gap 🔥</div>
+          <div class="m-value">80k</div>
+          <div class="m-sub">Facilities jumped +15k this week</div>
+        </div>
+
+        <div class="metric-box" style="border-color: var(--border);">
+          <div class="m-label">Next Reward Tier</div>
+          <div class="m-value" style="font-size: 48px; margin: 20px 0;">100k XP</div>
+          <div class="m-sub" style="color: var(--muted);">Unlocks catered team lunch</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ticker-wrap">
+      <div class="ticker-title">LIVE FEED</div>
+      <div class="ticker-move">
+        <span class="ticker-item">🚨 Facilities is making a massive push! Only 5k XP behind Operations!</span>
+        <span class="ticker-item">🏆 Operations Dept retains the #1 spot for the 3rd week in a row!</span>
+        <span class="ticker-item">✅ Procurement closed 4 Critical Gaps in Supply Chain Auditing today.</span>
+        <span class="ticker-item">🔥 Sarah J. earned the "Conscious Changemaker" badge! (+1,200 XP)</span>
+      </div>
+    </div>
+
+    <script>
+      // The Race Math (Going UP over 5 weeks)
+      const data = [
+        { name: "Procurement", color: "var(--rival1)", vals: [15, 30, 40, 50, 72] }, // Steady
+        { name: "Facilities", color: "var(--rival2)", vals: [5, 15, 35, 65, 80] },  // Huge comeback
+        { name: "Operations", color: "var(--accent)", vals: [20, 35, 55, 70, 85], isLeader: true } // The Leader
+      ];
+      
+      function drawChart() {
+        const w = 800; const h = 400;
+        const padX = 40; const padY = 40;
+        const maxVal = 100; const weeks = 4; // Arrays have 5 items (Week 0 to 4)
+        
+        const getX = (index) => padX + (index * ((w - padX * 2) / weeks));
+        const getY = (val) => h - padY - (val / maxVal * (h - padY * 2));
+
+        const grid = document.getElementById('grid');
+        const pathsG = document.getElementById('paths');
+        const pointsG = document.getElementById('points');
+
+        // Draw Grid Lines & Labels
+        for(let i=0; i<=5; i++) {
+          const val = i * 20; const y = getY(val);
+          grid.innerHTML += `<line x1="${padX}" y1="${y}" x2="${w-padX}" y2="${y}" class="grid-line" />`;
+          grid.innerHTML += `<text x="${padX - 10}" y="${y+5}" text-anchor="end" class="axis-text">${val}k</text>`;
+        }
+        for(let i=0; i<=weeks; i++) {
+          const x = getX(i);
+          grid.innerHTML += `<text x="${x}" y="${h - padY + 25}" text-anchor="middle" class="axis-text">Wk ${i+1}</text>`;
+        }
+
+        // Draw the Race Lines
+        data.forEach((dept, deptIndex) => {
+          let pathString = `M ${getX(0)} ${getY(dept.vals[0])}`;
+          dept.vals.forEach((val, i) => { if(i>0) pathString += ` L ${getX(i)} ${getY(val)}`; });
+          
+          // Animate the drawing of the lines
+          pathsG.innerHTML += `<path d="${pathString}" class="race-line draw-anim" style="stroke: ${dept.color};" />`;
+
+          // Draw the dots at the current week
+          const lastVal = dept.vals[dept.vals.length - 1];
+          const lastX = getX(dept.vals.length - 1);
+          const lastY = getY(lastVal);
+          
+          // If this is the leading department, add the "Radar Ping" effect behind the dot
+          if (dept.isLeader) {
+            pointsG.innerHTML += `<circle cx="${lastX}" cy="${lastY}" class="leader-ping" stroke="${dept.color}" style="animation-delay: 2s;" />`;
+          }
+          
+          // The actual solid dot
+          pointsG.innerHTML += `<circle cx="${lastX}" cy="${lastY}" r="8" class="race-point" stroke="${dept.color}" />`;
+        });
+      }
+
+      window.onload = drawChart;
+    </script>
+  </body>
+</html>
+
